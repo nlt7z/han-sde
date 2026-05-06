@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery — Han Cao</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+body { padding-top: 72px; }
+
+/* ── PAGE HEADER ── */
+.page-header { padding: 56px 56px 64px; }
+.page-eyebrow {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 16px;
+}
+.page-header-row {
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+
+/* ── GALLERY GRID ── */
+/*
+  Masonry-style 2-column grid.
+  Photo cells start hidden and reveal one-by-one on scroll.
+  Add your photos as:  /Users/fangyuan/Desktop/caohan/photos/photo-01.jpg  etc.
+  or relative path:    photos/photo-01.jpg
+*/
+.gallery-grid {
+  padding: 0 56px 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+
+/* Featured (full-width) */
+.photo-cell.featured {
+  grid-column: span 2;
+}
+
+.photo-cell {
+  position: relative;
+  overflow: hidden;
+  background: var(--gray-c);
+  /* initial state */
+  opacity: 0;
+  transform: translateY(36px);
+  will-change: transform, opacity;
+}
+
+/* Aspect-ratio containers */
+.photo-cell.ratio-16-9 { aspect-ratio: 16/9; }
+.photo-cell.ratio-3-2  { aspect-ratio: 3/2; }
+.photo-cell.ratio-2-3  { aspect-ratio: 2/3; }
+.photo-cell.ratio-1-1  { aspect-ratio: 1/1; }
+.photo-cell.ratio-4-3  { aspect-ratio: 4/3; }
+.photo-cell.ratio-3-4  { aspect-ratio: 3/4; }
+
+/* Photo fills cell */
+.photo-cell img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .6s ease, filter .4s ease;
+  /* placeholder appearance before image loads */
+  filter: brightness(.9);
+}
+
+/* Hover: scale + overlay */
+.photo-cell:hover img {
+  transform: scale(1.03);
+  filter: brightness(.75);
+}
+.photo-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px 28px;
+  background: linear-gradient(to top, rgba(14,12,10,.7) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.photo-cell:hover .photo-overlay { opacity: 1; }
+.photo-title {
+  font-family: var(--serif);
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--fg);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.photo-meta {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(242,237,229,.6);
+}
+
+/* ── PLACEHOLDER (shown when no img src) ── */
+/*
+  Each cell has a CSS gradient placeholder.
+  Replace the empty <img> src="" with your actual photo path.
+  Photos go in:  /Users/fangyuan/Desktop/caohan/photos/
+*/
+.ph-1  { background: linear-gradient(135deg, #1a1714 0%, #333028 100%); }
+.ph-2  { background: linear-gradient(160deg, #0e1018 0%, #1e2530 100%); }
+.ph-3  { background: linear-gradient(120deg, #18110e 0%, #2e2218 100%); }
+.ph-4  { background: linear-gradient(200deg, #111614 0%, #1e2e28 100%); }
+.ph-5  { background: linear-gradient(135deg, #161215 0%, #282030 100%); }
+.ph-6  { background: linear-gradient(160deg, #101518 0%, #1c2830 100%); }
+.ph-7  { background: linear-gradient(120deg, #181614 0%, #2c2820 100%); }
+.ph-8  { background: linear-gradient(200deg, #121010 0%, #241e1e 100%); }
+.ph-9  { background: linear-gradient(135deg, #141818 0%, #202c2c 100%); }
+.ph-10 { background: linear-gradient(160deg, #181410 0%, #302818 100%); }
+
+/* Placeholder text */
+.ph-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: rgba(242,237,229,.15);
+  pointer-events: none;
+  user-select: none;
+}
+.ph-hint .ph-icon { font-size: 28px; }
+.ph-hint .ph-text { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+
+/* ── LIGHTBOX (click to expand) ── */
+#lightbox {
+  position: fixed; inset: 0;
+  background: rgba(14,12,10,.96);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+  backdrop-filter: blur(4px);
+}
+#lightbox.open { opacity: 1; pointer-events: all; }
+#lightbox img {
+  max-width: 90vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border: none;
+  display: block;
+}
+.lb-close {
+  position: absolute;
+  top: 28px; right: 36px;
+  font-size: 11px; letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gray-b);
+  cursor: pointer;
+  transition: color .3s;
+}
+.lb-close:hover { color: var(--fg); }
+.lb-caption {
+  position: absolute;
+  bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+.lb-caption .photo-title { font-size: 18px; }
+.lb-caption .photo-meta { margin-top: 4px; }
+
+@media (max-width: 768px) {
+  .gallery-grid { padding: 0 0 60px; grid-template-columns: 1fr; gap: 2px; }
+  .photo-cell.featured { grid-column: span 1; }
+  .photo-cell.ratio-2-3 { aspect-ratio: 4/3; }
+  .page-header { padding: 40px 24px 52px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo">Han Cao</a>
+  <ul class="nav-list">
+    <li><a href="work.html">Work</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="gallery.html" class="active">Gallery</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
+
+<header class="page-header">
+  <p class="page-eyebrow">Photography</p>
+  <div class="page-header-row">
+    <h1 class="t-title">Gallery</h1>
+    <span class="t-label">Personal work</span>
+  </div>
+  <div class="hr" style="margin-top:32px"></div>
+</header>
+
+<!--
+  ══════════════════════════════════════════════════════
+  HOW TO ADD YOUR PHOTOS:
+  1. Create folder:  /Users/fangyuan/Desktop/caohan/photos/
+  2. Drop your images in as:  photo-01.jpg, photo-02.jpg, etc.
+  3. Replace each   src=""   below with   src="photos/photo-01.jpg"
+  4. Update the title and meta text for each photo
+  ══════════════════════════════════════════════════════
+-->
+<div class="gallery-grid" id="gallery">
+
+  <!-- Row 1: Full-width featured -->
+  <div class="photo-cell featured ratio-16-9 ph-1" data-title="Untitled" data-meta="2024">
+    <img src="" alt="Featured photo" loading="lazy">
+    <div class="ph-hint">
+      <div class="ph-icon">□</div>
+      <div class="ph-text">photos/photo-01.jpg</div>
+    </div>
+    <div class="photo-overlay">
+      <div class="photo-title">Untitled</div>
+      <div class="photo-meta">2024</div>
+    </div>
+  </div>
+
+  <!-- Row 2: 3:2 + 2:3 -->
+  <div class="photo-cell ratio-3-2 ph-2" data-title="Untitled" data-meta="">
+    <img src="" alt="" loading="lazy">
+    <div class="ph-hint"><div class="ph-icon">□</div><div class="ph-text">photo-02.jpg</div></div>
+    <div class="photo-overlay"><div class="photo-title">Untitled</div><div class="photo-meta"></div></div>
+  </div>
+  <div class="photo-cell ratio-2-3 ph-3" data-title="Untitled" data-meta="">
+    <img src="" alt="" loading="lazy">
+    <div class="ph-hint"><div class="ph-icon">□</div><div class="ph-text">photo-03.jpg</div></div>
+    <div class="photo-overlay"><div class="photo-title">Untitled</div><div class="photo-meta"></div></div>
+  </div>
+
+  <!-- Row 3: 1:1 + 1:1 -->
+  <div class="photo-cell ratio-1-1 ph-4" data-title="Untitled" data-meta="">
+    <img src="" alt="" loading="lazy">
+    <div class="ph-hint"><div class="ph-icon">□</div><div class="ph-text">photo-04.jpg</div></div>
+    <div class="photo-overlay"><div class="photo-title">Untitled</div><div class="photo-meta"></div></div>
+  </div>
+  <div class="photo-cell ratio-1-1 ph-5" data-title="Untitled" data-meta="">
+    <img src="" alt="" loading="lazy">
+    <div class="ph-hint"><div class="ph-icon">□</div><div class="ph-text">photo-05.jpg</div></div>
+    <div class="photo-overlay"><div class="photo-title">Untitled</div><div class="photo-meta"></div></div>
+  </div>
+
+  <!-- Row 4: 4:3 + 3:4 -->
+  <div class="photo-cell ratio-4-3 ph-6" data-title="Untitled" data-meta="">
+    <img src="" alt="" loading="lazy">
+    <div class="ph-hint"><div class="ph-icon">□</div><div class="ph-text">photo-06.jpg</div></div>
+    <div class="photo-overlay"><div class="photo-title">Untitled</div><div class="photo-meta"></div></div>
+  </div>
+  <div class="photo-cell ratio-3-4 ph-7" data-title="Untitled" data-meta="">
+    <img src="" alt="" loading="lazy">
+    <div class="ph-hint"><div class="ph-icon">□</div><div class="ph-text">photo-07.jpg</div></div>
+    <div class="photo-overlay"><div class="photo-title">Untitled</div><div class="photo-meta"></div></div>
+  </div>
+
+  <!-- Row 5: Full-width featured -->
+  <div class="photo-cell featured ratio-16-9 ph-8" data-title="Untitled" data-meta="">
+    <img src="" alt="" loading="lazy">
+    <div class="ph-hint"><div class="ph-icon">□</div><div class="ph-text">photo-08.jpg</div></div>
+    <div class="photo-overlay"><div class="photo-title">Untitled</div><div class="photo-meta"></div></div>
+  </div>
+
+  <!-- Row 6: 2:3 + 3:2 -->
+  <div class="photo-cell ratio-2-3 ph-9" data-title="Untitled" data-meta="">
+    <img src="" alt="" loading="lazy">
+    <div class="ph-hint"><div class="ph-icon">□</div><div class="ph-text">photo-09.jpg</div></div>
+    <div class="photo-overlay"><div class="photo-title">Untitled</div><div class="photo-meta"></div></div>
+  </div>
+  <div class="photo-cell ratio-3-2 ph-10" data-title="Untitled" data-meta="">
+    <img src="" alt="" loading="lazy">
+    <div class="ph-hint"><div class="ph-icon">□</div><div class="ph-text">photo-10.jpg</div></div>
+    <div class="photo-overlay"><div class="photo-title">Untitled</div><div class="photo-meta"></div></div>
+  </div>
+
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <span class="lb-close" id="lb-close">Close &nbsp;✕</span>
+  <img src="" alt="" id="lb-img">
+  <div class="lb-caption">
+    <div class="photo-title" id="lb-title"></div>
+    <div class="photo-meta" id="lb-meta"></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <span class="footer-copy">Han Cao — Gallery</span>
+  <span class="footer-copy">
+    <a href="about.html" style="color:var(--gray-a);transition:color .3s"
+       onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--gray-a)'">About →</a>
+  </span>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+window.addEventListener('load', () => { document.body.classList.add('visible'); });
+
+gsap.from('.page-header', { opacity: 0, y: -16, duration: .7, ease: 'power3.out', delay: .1 });
+
+/*
+  ── STAGGERED GALLERY REVEAL ──
+  Cells enter in groups: featured first, then pairs row by row.
+  Each cell slides up and fades in sequentially (the "laying" pattern).
+*/
+const cells = document.querySelectorAll('.photo-cell');
+
+cells.forEach((cell, i) => {
+  ScrollTrigger.create({
+    trigger: cell,
+    start: 'top 88%',
+    once: true,
+    onEnter: () => {
+      gsap.to(cell, {
+        opacity: 1,
+        y: 0,
+        duration: .8,
+        ease: 'power3.out',
+        delay: (i % 2) * .12, /* pair stagger: left slightly before right */
+      });
+    }
+  });
+});
+
+/* ── LIGHTBOX ── */
+const lb    = document.getElementById('lightbox');
+const lbImg = document.getElementById('lb-img');
+const lbTtl = document.getElementById('lb-title');
+const lbMta = document.getElementById('lb-meta');
+
+cells.forEach(cell => {
+  cell.style.cursor = 'pointer';
+  cell.addEventListener('click', () => {
+    const img = cell.querySelector('img');
+    if (!img || !img.src || img.src === window.location.href) return; /* no src set */
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lbTtl.textContent = cell.dataset.title || '';
+    lbMta.textContent = cell.dataset.meta  || '';
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+});
+
+function closeLb() {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => { lbImg.src = ''; }, 350);
+}
+document.getElementById('lb-close').addEventListener('click', closeLb);
+lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+/* Page transition */
+document.querySelectorAll('a[href$=".html"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const href = a.getAttribute('href');
+    document.body.style.transition = 'opacity .38s ease';
+    document.body.style.opacity = '0';
+    setTimeout(() => { window.location.href = href; }, 400);
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Han Cao</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { padding-top: 72px; }
+
+/* local reveal system */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal.d1 { transition-delay: .12s; }
+.reveal.d2 { transition-delay: .24s; }
+.reveal.d3 { transition-delay: .36s; }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  padding: 60px 56px 80px;
+}
+.page-eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 18px;
+}
+
+/* ── BIO ── */
+.bio-section {
+  padding: 0 56px 80px;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 0 100px;
+  align-items: start;
+}
+.bio-text {}
+.bio-lead {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(22px, 2.5vw, 32px);
+  line-height: 1.45;
+  letter-spacing: -.01em;
+  color: var(--fg);
+  margin-bottom: 32px;
+}
+.bio-body {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.82;
+  color: var(--gray-a);
+  max-width: 580px;
+}
+.bio-body p + p { margin-top: 20px; }
+
+/* ── SIDEBAR FACTS ── */
+.bio-aside {
+  padding-top: 8px;
+  border-left: 1px solid var(--line);
+  padding-left: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.fact-block {}
+.fact-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gray-b);
+  margin-bottom: 8px;
+}
+.fact-value {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--gray-a);
+  line-height: 1.6;
+}
+.fact-value a {
+  color: var(--gray-a);
+  transition: color .3s;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--gray-b);
+}
+.fact-value a:hover { color: var(--fg); }
+.fact-value strong { color: var(--fg); font-weight: 400; }
+
+/* ── EDUCATION ── */
+.edu-section {
+  padding: 0 56px 80px;
+  border-top: 1px solid var(--line);
+  padding-top: 64px;
+}
+.section-head {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gray-b);
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.section-head::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.edu-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0 48px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line);
+}
+.edu-row:first-of-type { border-top: 1px solid var(--line); }
+.edu-school {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(20px, 2vw, 28px);
+  letter-spacing: -.01em;
+  margin-bottom: 6px;
+}
+.edu-degree {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--gray-a);
+  margin-bottom: 4px;
+}
+.edu-gpa {
+  font-size: 12px;
+  color: var(--orange);
+  letter-spacing: .04em;
+}
+.edu-year {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--gray-b);
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+
+/* ── SKILLS / STACK ── */
+.stack-section {
+  padding: 0 56px 80px;
+  border-top: 1px solid var(--line);
+  padding-top: 64px;
+}
+.stack-groups {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.stack-group {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--line);
+}
+.stack-group:not(:last-child) { padding-right: 40px; }
+.stack-group:nth-child(2) { padding-left: 40px; border-left: 1px solid var(--line); }
+.stack-group:nth-child(3) { padding-left: 40px; border-left: 1px solid var(--line); }
+.stack-group-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gray-b);
+  margin-bottom: 18px;
+}
+.stack-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.stack-item {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--gray-a);
+  transition: color .3s;
+}
+.stack-item:hover { color: var(--fg); }
+.stack-item.primary { color: var(--fg); font-weight: 400; }
+
+/* ── CERTIFICATIONS ── */
+.cert-section {
+  padding: 0 56px 80px;
+}
+.cert-list-items {
+  display: flex;
+  flex-direction: column;
+}
+.cert-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0 48px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+.cert-row:first-of-type { border-top: 1px solid var(--line); }
+.cert-name {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--fg);
+}
+.cert-issuer {
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--gray-b);
+  white-space: nowrap;
+}
+
+/* ── CONTACT ── */
+.contact-section {
+  padding: 80px 56px 100px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 100px;
+  align-items: start;
+}
+.contact-left {}
+.contact-headline {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(36px, 5vw, 72px);
+  line-height: 1;
+  letter-spacing: -.02em;
+  margin-bottom: 20px;
+}
+.contact-sub {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--gray-a);
+  max-width: 380px;
+  line-height: 1.7;
+}
+.contact-right {
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.contact-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.contact-row:first-child { border-top: 1px solid var(--line); }
+.contact-type {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gray-b);
+}
+.contact-val {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--gray-a);
+  transition: color .3s;
+}
+.contact-val:hover { color: var(--fg); }
+a.contact-val { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--gray-b); }
+
+@media (max-width: 900px) {
+  .bio-section { grid-template-columns: 1fr; }
+  .bio-aside { border-left: none; padding-left: 0; border-top: 1px solid var(--line); padding-top: 40px; flex-direction: row; flex-wrap: wrap; gap: 32px; }
+  .stack-groups { grid-template-columns: 1fr 1fr; }
+  .stack-group:nth-child(3) { grid-column: span 2; border-left: none; padding-left: 0; border-top: 1px solid var(--line); }
+  .contact-section { grid-template-columns: 1fr; gap: 48px; }
+}
+@media (max-width: 768px) {
+  .page-header { padding: 40px 24px 60px; }
+  .bio-section, .edu-section, .stack-section, .cert-section, .contact-section { padding-left: 24px; padding-right: 24px; }
+  .stack-groups { grid-template-columns: 1fr; }
+  .stack-group:nth-child(2), .stack-group:nth-child(3) { border-left: none; padding-left: 0; border-top: 1px solid var(--line); }
+  .stack-group:nth-child(3) { grid-column: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo">Han Cao</a>
+  <ul class="nav-list">
+    <li><a href="work.html">Work</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header reveal">
+  <p class="page-eyebrow">Background</p>
+  <h1 class="t-title">About</h1>
+  <div class="hr" style="margin-top:40px"></div>
+</header>
+
+<!-- BIO -->
+<section class="bio-section">
+  <div class="bio-text reveal">
+    <p class="bio-lead">
+      Software engineer who builds infrastructure and AI systems that millions of people depend on.
+    </p>
+    <div class="bio-body">
+      <p>
+        Han Cao is a software development engineer at Amazon with 3+ years building
+        production systems at scale. Currently at Amazon Lex, where he shipped Bot
+        Analyzer — a publicly available AI feature that went live across 11 AWS regions
+        and saw 1,000+ analyses in its first four days.
+      </p>
+      <p>
+        Previously at AWS Lambda, he led the automation of the Lambda EventBridge control
+        plane region builds — replacing a fully manual process — and co-designed the
+        multi-dimensional token bucket throttling system that protects the Lambda fleet
+        from cross-tenant traffic spikes.
+      </p>
+      <p>
+        He holds an M.S. in Computer Science from Northwestern University (GPA 3.86) and
+        a B.S. in Computer Science with a Minor in Mathematics from Simon Fraser University.
+        He holds three professional certifications from AWS and Oracle, and has published
+        academic research and holds a granted patent.
+      </p>
+    </div>
+  </div>
+
+  <div class="bio-aside reveal d2">
+    <div class="fact-block">
+      <div class="fact-label">Location</div>
+      <div class="fact-value">Seattle, Washington</div>
+    </div>
+    <div class="fact-block">
+      <div class="fact-label">Currently</div>
+      <div class="fact-value"><strong>Amazon Web Services</strong><br>SDE, Generative AI</div>
+    </div>
+    <div class="fact-block">
+      <div class="fact-label">Languages</div>
+      <div class="fact-value">English, Mandarin</div>
+    </div>
+    <div class="fact-block">
+      <div class="fact-label">WeChat</div>
+      <div class="fact-value">CutestMinion</div>
+    </div>
+    <div class="fact-block">
+      <div class="fact-label">LinkedIn</div>
+      <div class="fact-value">
+        <a href="https://linkedin.com/in/han-ca0">han-ca0</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section class="edu-section">
+  <p class="section-head">Education</p>
+
+  <div class="edu-row reveal">
+    <div>
+      <div class="edu-school">Northwestern University</div>
+      <div class="edu-degree">M.S. Computer Science</div>
+      <div class="edu-gpa">GPA 3.86 / 4.0</div>
+    </div>
+    <span class="edu-year">2020 – 2022</span>
+  </div>
+
+  <div class="edu-row reveal d1">
+    <div>
+      <div class="edu-school">Simon Fraser University</div>
+      <div class="edu-degree">B.S. Computer Science &nbsp;·&nbsp; Minor in Mathematics</div>
+    </div>
+    <span class="edu-year">2017 – 2020</span>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="stack-section">
+  <p class="section-head">Technical Stack</p>
+  <div class="stack-groups">
+    <div class="stack-group reveal">
+      <div class="stack-group-label">Languages</div>
+      <div class="stack-items">
+        <span class="stack-item primary">Java (Spring Boot)</span>
+        <span class="stack-item primary">Python</span>
+        <span class="stack-item">JavaScript (React)</span>
+        <span class="stack-item">C++</span>
+        <span class="stack-item">Ruby</span>
+        <span class="stack-item">Haskell</span>
+      </div>
+    </div>
+    <div class="stack-group reveal d1">
+      <div class="stack-group-label">AWS Services</div>
+      <div class="stack-items">
+        <span class="stack-item primary">Lambda</span>
+        <span class="stack-item primary">Lex</span>
+        <span class="stack-item primary">Bedrock</span>
+        <span class="stack-item primary">Step Functions</span>
+        <span class="stack-item primary">DynamoDB</span>
+        <span class="stack-item">S3, CloudFormation, CloudWatch, IAM</span>
+      </div>
+    </div>
+    <div class="stack-group reveal d2">
+      <div class="stack-group-label">Expertise</div>
+      <div class="stack-items">
+        <span class="stack-item primary">Distributed Systems</span>
+        <span class="stack-item primary">LLM Integration</span>
+        <span class="stack-item primary">Infrastructure Automation</span>
+        <span class="stack-item">Multi-Region Deployment</span>
+        <span class="stack-item">CI/CD Pipelines</span>
+        <span class="stack-item">MapReduce</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section class="cert-section">
+  <p class="section-head">Certifications</p>
+  <div class="cert-list-items">
+    <div class="cert-row reveal">
+      <span class="cert-name">AWS Certified Solutions Architect — Professional</span>
+      <span class="cert-issuer">Amazon Web Services</span>
+    </div>
+    <div class="cert-row reveal d1">
+      <span class="cert-name">AWS Certified Generative AI Developer — Professional</span>
+      <span class="cert-issuer">Amazon Web Services</span>
+    </div>
+    <div class="cert-row reveal d2">
+      <span class="cert-name">Oracle Certified Java SE 8 Developer</span>
+      <span class="cert-issuer">Oracle Corporation</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section">
+  <div class="contact-left reveal">
+    <h2 class="contact-headline">
+      Let's build<br>something.
+    </h2>
+    <p class="contact-sub">
+      Open to senior SDE roles, staff engineering,<br>
+      and ambitious technical challenges.
+    </p>
+  </div>
+  <div class="contact-right reveal d2">
+    <div class="contact-row">
+      <span class="contact-type">Email</span>
+      <a href="mailto:hanmail1024@gmail.com" class="contact-val">hanmail1024@gmail.com</a>
+    </div>
+    <div class="contact-row">
+      <span class="contact-type">Phone</span>
+      <a href="tel:+18728884530" class="contact-val">+1 872 888 4530</a>
+    </div>
+    <div class="contact-row">
+      <span class="contact-type">LinkedIn</span>
+      <a href="https://linkedin.com/in/han-ca0" class="contact-val">han-ca0</a>
+    </div>
+    <div class="contact-row">
+      <span class="contact-type">WeChat</span>
+      <span class="contact-val">CutestMinion</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <span class="footer-copy">Han Cao · Software Development Engineer · AWS</span>
+  <span class="footer-copy" style="color:var(--gray-b)">Seattle, WA · 2025</span>
+</footer>
+
+<script>
+window.addEventListener('load', () => { document.body.classList.add('visible'); });
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+  });
+}, { threshold: .1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+document.querySelectorAll('a[href$=".html"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const href = a.getAttribute('href');
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity .4s ease';
+    setTimeout(() => { window.location.href = href; }, 420);
+  });
+});
+</script>
+</body>
+</html>

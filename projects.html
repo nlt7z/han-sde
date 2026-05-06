@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects — Han Cao</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+body { padding-top: 72px; }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  padding: 56px 56px 72px;
+}
+.page-eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+}
+.page-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+/* ── ENTRY ROWS ──
+   Each entry slides up from translateY(64px) → 0
+   and fades in, one after another as you scroll.
+   This creates the "stacking one by one" feel.
+*/
+.entries { padding: 0 56px; }
+
+.entry-group {
+  border-top: 1px solid var(--line-hi);
+  padding-top: 0;
+}
+
+.group-label {
+  padding: 40px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 0;
+}
+.group-label-text {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--gray-b);
+  white-space: nowrap;
+}
+.group-label-line {
+  display: none;
+}
+
+/* Single entry */
+.entry {
+  display: grid;
+  grid-template-columns: 52px 1fr 240px;
+  gap: 0 44px;
+  padding: 48px 0;
+  border-bottom: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(60px);
+  will-change: transform, opacity;
+}
+
+.entry-idx {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  color: var(--orange);
+  padding-top: 5px;
+}
+.entry-body {}
+.entry-type {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gray-b);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.entry-type::before {
+  content: '';
+  display: block;
+  width: 12px; height: 1px;
+  background: var(--gray-b);
+}
+.entry-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(22px, 2.5vw, 32px);
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  margin-bottom: 18px;
+  color: var(--fg);
+}
+.entry-desc {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.82;
+  color: var(--gray-a);
+  max-width: 520px;
+}
+.entry-ref {
+  margin-top: 18px;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--gray-b);
+  letter-spacing: .02em;
+}
+
+.entry-aside {
+  padding-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.aside-block {}
+.aside-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gray-b);
+  margin-bottom: 5px;
+}
+.aside-value {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--gray-a);
+  line-height: 1.5;
+}
+.aside-value.hi { color: var(--fg); }
+
+/* ── TOOL GRID ── */
+.tools-section {
+  padding: 80px 56px;
+}
+.tools-section-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--gray-b);
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.tools-section-label::after {
+  content: none;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--line-hi);
+}
+
+.tool-cell {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(44px);
+  will-change: transform, opacity;
+}
+.tool-cell:nth-child(odd) {
+  padding-right: 56px;
+  border-right: 1px solid var(--line);
+}
+.tool-cell:nth-child(even) {
+  padding-left: 56px;
+}
+
+.tool-num {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  color: var(--orange);
+  margin-bottom: 14px;
+}
+.tool-name {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  margin-bottom: 14px;
+  color: var(--fg);
+}
+.tool-desc {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.78;
+  color: var(--gray-a);
+}
+.tool-meta {
+  margin-top: 14px;
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--gray-b);
+}
+
+@media (max-width: 900px) {
+  .entry { grid-template-columns: 32px 1fr; }
+  .entry-aside { display: none; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .tool-cell:nth-child(odd) { padding-right: 0; border-right: none; }
+  .tool-cell:nth-child(even) { padding-left: 0; }
+}
+@media (max-width: 768px) {
+  .page-header { padding: 40px 24px 56px; }
+  .entries { padding: 0 24px; }
+  .tools-section { padding: 60px 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo">Han Cao</a>
+  <ul class="nav-list">
+    <li><a href="work.html">Work</a></li>
+    <li><a href="projects.html" class="active">Projects</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header" id="page-header">
+  <p class="page-eyebrow">Research &amp; Patents</p>
+  <div class="page-header-row">
+    <h1 class="t-title">Projects</h1>
+    <span class="t-label">Independent work</span>
+  </div>
+  <div class="hr" style="margin-top:36px"></div>
+</header>
+
+<!-- RESEARCH ENTRIES -->
+<section class="entries">
+
+  <div class="entry-group">
+    <div class="group-label">
+      <span class="group-label-text">Publications &amp; Patents</span>
+      <div class="group-label-line"></div>
+    </div>
+
+    <!-- Entry 01 -->
+    <div class="entry" id="e1">
+      <span class="entry-idx">01</span>
+      <div class="entry-body">
+        <p class="entry-type">Academic Publication</p>
+        <h2 class="entry-title">Learning-based Software<br>Defect Prediction</h2>
+        <p class="entry-desc">
+          A systematic study evaluating machine learning approaches for predicting
+          software defects in production codebases. Explored feature extraction from
+          abstract syntax trees, code metrics, and change history. Evaluated
+          classification models across multiple open-source Java projects.
+        </p>
+        <p class="entry-ref">Han Cao — Journal of Physics, Conference Series · CCEAI 2020</p>
+      </div>
+      <div class="entry-aside">
+        <div class="aside-block">
+          <div class="aside-label">Venue</div>
+          <div class="aside-value">CCEAI 2020</div>
+        </div>
+        <div class="aside-block">
+          <div class="aside-label">Published in</div>
+          <div class="aside-value">Journal of Physics</div>
+        </div>
+        <div class="aside-block">
+          <div class="aside-label">Year</div>
+          <div class="aside-value hi">2020</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Entry 02 -->
+    <div class="entry" id="e2">
+      <span class="entry-idx">02</span>
+      <div class="entry-body">
+        <p class="entry-type">Utility Patent — Granted</p>
+        <h2 class="entry-title">TCM Self-Service Clinic<br>Management System</h2>
+        <p class="entry-desc">
+          Invented a self-service inquiry management system for Traditional Chinese Medicine
+          outpatient clinics, streamlining patient intake and pre-consultation workflows.
+          Enables patients to complete structured symptom entry and consultation routing
+          without front-desk intervention.
+        </p>
+        <p class="entry-ref">Grant No. ZL 2017 2 1856637.6 — Patent Authority of China</p>
+      </div>
+      <div class="entry-aside">
+        <div class="aside-block">
+          <div class="aside-label">Status</div>
+          <div class="aside-value hi">Granted</div>
+        </div>
+        <div class="aside-block">
+          <div class="aside-label">Patent No.</div>
+          <div class="aside-value">ZL 2017 2 1856637.6</div>
+        </div>
+        <div class="aside-block">
+          <div class="aside-label">Year</div>
+          <div class="aside-value">2017</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- INTERNAL TOOLING -->
+<section class="tools-section">
+  <div class="tools-section-label">Internal Tooling</div>
+  <div class="tools-grid">
+
+    <div class="tool-cell" id="t1">
+      <div class="tool-num">03</div>
+      <div class="tool-name">LLM Evaluation Framework</div>
+      <p class="tool-desc">Internal benchmark suite for evaluating 12 large language models across accuracy, latency, and cost for production model selection at Amazon Lex.</p>
+      <p class="tool-meta">Amazon Lex · 2024</p>
+    </div>
+
+    <div class="tool-cell" id="t2">
+      <div class="tool-num">04</div>
+      <div class="tool-name">Region Build Orchestration</div>
+      <p class="tool-desc">New orchestration model replacing the manual Lambda region expansion process. Parallelised IA-gating tasks and integrated with automated region config systems.</p>
+      <p class="tool-meta">AWS Lambda · 2023</p>
+    </div>
+
+    <div class="tool-cell" id="t3">
+      <div class="tool-num">05</div>
+      <div class="tool-name">Load Testing Suite</div>
+      <p class="tool-desc">Designed and executed load testing simulating ~7× normal production traffic across 50,000 throttle cache keys to validate Lambda control plane latency impact.</p>
+      <p class="tool-meta">AWS Lambda · 2023</p>
+    </div>
+
+    <div class="tool-cell" id="t4">
+      <div class="tool-num">06</div>
+      <div class="tool-name">MapReduce Analysis Pipeline</div>
+      <p class="tool-desc">Custom MapReduce pipeline that shards Amazon Lex bots by intent for parallel processing and result aggregation, achieving sub-60-second analysis for bots with 1,000+ intents.</p>
+      <p class="tool-meta">Amazon Lex · 2024</p>
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <span class="footer-copy">Han Cao — Projects</span>
+  <span class="footer-copy">
+    <a href="about.html" style="color:var(--gray-a);transition:color .3s"
+       onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--gray-a)'">
+      About →
+    </a>
+  </span>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+window.addEventListener('load', () => { document.body.classList.add('visible'); });
+
+gsap.from('#page-header', {
+  opacity: 0, y: -20,
+  duration: .8, ease: 'power3.out', delay: .15
+});
+
+/*
+  ── STACKING ENTRY ANIMATION ──
+  Entries slide up sequentially — each one "lays itself"
+  onto the page as you scroll past it.
+  The stagger within each group reinforces the sequential feel.
+*/
+gsap.to(['#e1', '#e2'], {
+  opacity: 1,
+  y: 0,
+  duration: .9,
+  ease: 'power3.out',
+  stagger: {
+    each: .18,   /* 180ms between each entry — clear sequential feel */
+    from: 'start',
+  },
+  scrollTrigger: {
+    trigger: '#e1',
+    start: 'top 78%',
+    toggleActions: 'play none none none',
+  }
+});
+
+/* Tool cells stagger in pairs (left then right) */
+[['#t1','#t2'], ['#t3','#t4']].forEach(pair => {
+  gsap.to(pair, {
+    opacity: 1,
+    y: 0,
+    duration: .8,
+    ease: 'power3.out',
+    stagger: .15,
+    scrollTrigger: {
+      trigger: pair[0],
+      start: 'top 80%',
+      toggleActions: 'play none none none',
+    }
+  });
+});
+
+document.querySelectorAll('a[href$=".html"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const href = a.getAttribute('href');
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity .38s ease';
+    setTimeout(() => { window.location.href = href; }, 400);
+  });
+});
+</script>
+</body>
+</html>

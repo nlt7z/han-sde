@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work — Han Cao</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+body { padding-top: 72px; } /* nav height */
+
+/* ── PAGE HEADER ── */
+.page-header { padding: 56px 56px 64px; }
+.page-eyebrow {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 16px;
+}
+.page-header-row {
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+
+/* ── JOB SECTION ── */
+.job-header {
+  padding: 56px 56px 44px;
+  border-top: 1px solid var(--line-hi);
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  align-items: baseline;
+  gap: 0 36px;
+}
+.job-idx {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: .1em; color: var(--orange);
+  align-self: flex-start; padding-top: 10px;
+  /* initial */ opacity: 0;
+}
+.job-company {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gray-b); margin-bottom: 10px;
+  /* initial */ opacity: 0; transform: translateY(12px);
+}
+.job-title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1; letter-spacing: -.02em;
+  /* initial */ opacity: 0; transform: translateY(20px);
+}
+.job-date {
+  font-size: 12px; font-weight: 300;
+  color: var(--gray-b); letter-spacing: .06em;
+  white-space: nowrap; align-self: flex-start;
+  padding-top: 8px; text-align: right; line-height: 1.7;
+  /* initial */ opacity: 0;
+}
+
+/* ── PROJ PANELS ── */
+.proj-panels {
+  padding: 0 56px;
+  padding-left: calc(56px + 52px + 36px);
+  padding-bottom: 72px;
+}
+.proj-panel {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 0 72px;
+  padding: 44px 0;
+  border-top: 1px solid var(--line);
+  position: relative;
+}
+
+/* Animated line that extends on reveal */
+.proj-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 0; height: 1px;
+  background: var(--orange);
+  opacity: 0;
+}
+
+.proj-type {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gray-b); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+  /* initial */ opacity: 0;
+}
+.proj-type::before {
+  content: '';
+  display: block; width: 14px; height: 1px;
+  background: var(--orange);
+}
+.proj-name {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(22px, 2.5vw, 32px);
+  line-height: 1.1; letter-spacing: -.01em;
+  margin-bottom: 18px; color: var(--fg);
+  /* initial */ opacity: 0; transform: translateY(18px);
+}
+.proj-desc {
+  font-size: 14px; font-weight: 300;
+  line-height: 1.82; color: var(--gray-a);
+  max-width: 500px;
+  /* initial */ opacity: 0; transform: translateY(14px);
+}
+.proj-desc + .proj-desc { margin-top: 14px; }
+
+.proj-right { padding-top: 4px; }
+.metrics-list {
+  display: flex; flex-direction: column; gap: 24px;
+  /* initial */ opacity: 0; transform: translateX(16px);
+}
+.mi-num {
+  font-family: var(--serif); font-weight: 300;
+  font-size: clamp(28px, 3.5vw, 46px);
+  line-height: 1; letter-spacing: -.02em; color: var(--fg);
+}
+.mi-num sub {
+  font-size: .5em; vertical-align: middle;
+  margin-left: 2px; color: var(--gray-b);
+}
+.mi-lbl {
+  font-size: 11px; font-weight: 400;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--gray-b); margin-top: 3px;
+}
+
+/* Row hover: subtle background lighten */
+.proj-panel {
+  transition: background .35s ease;
+}
+.proj-panel:hover { background: rgba(255,255,255,.02); }
+
+/* ── TECH FOOTER ── */
+.tech-footer {
+  padding: 52px 56px;
+  border-top: 1px solid var(--line);
+  opacity: 0; transform: translateY(20px);
+}
+.tech-label {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--gray-b); margin-bottom: 18px;
+}
+.tech-text {
+  font-family: var(--serif); font-weight: 300;
+  font-style: italic;
+  font-size: clamp(18px, 2vw, 26px);
+  line-height: 1.6; color: var(--gray-a);
+}
+.tech-text em { font-style: normal; color: var(--fg); }
+
+@media (max-width: 900px) {
+  .proj-panel { grid-template-columns: 1fr; gap: 28px; }
+  .metrics-list { flex-direction: row; flex-wrap: wrap; gap: 20px; }
+}
+@media (max-width: 768px) {
+  .page-header { padding: 40px 24px 52px; }
+  .job-header { padding: 48px 24px 40px; grid-template-columns: 32px 1fr auto; gap: 0 16px; }
+  .proj-panels { padding: 0 24px 56px; }
+  .tech-footer { padding: 40px 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo">Han Cao</a>
+  <ul class="nav-list">
+    <li><a href="work.html" class="active">Work</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
+
+<header class="page-header">
+  <p class="page-eyebrow">Experience</p>
+  <div class="page-header-row">
+    <h1 class="t-title">Work</h1>
+    <span class="t-label">2 positions &nbsp;·&nbsp; 3+ years</span>
+  </div>
+  <div class="hr" style="margin-top:32px"></div>
+</header>
+
+<!-- JOB 01 -->
+<article>
+  <div class="job-header" data-job="1">
+    <span class="job-idx">01</span>
+    <div>
+      <p class="job-company">Amazon Web Services</p>
+      <h2 class="job-title">Amazon Lex</h2>
+    </div>
+    <div class="job-date">Jun 2024<br>Present</div>
+  </div>
+  <div class="proj-panels">
+    <div class="proj-panel" data-panel>
+      <div class="proj-left">
+        <p class="proj-type">Public AWS Feature</p>
+        <h3 class="proj-name">Bot Analyzer</h3>
+        <p class="proj-desc">LLM-driven configuration analysis for Amazon Lex chatbots, surfacing alignment with AWS best practices through public API and the Lex console. Designed and shipped across 11 AWS regions — end to end.</p>
+        <p class="proj-desc">Benchmarked 12 LLMs on accuracy, latency, and cost. Built async pipeline with Step Functions, Bedrock, and DynamoDB. MapReduce architecture for parallel intent processing.</p>
+      </div>
+      <div class="proj-right">
+        <div class="metrics-list">
+          <div class="mi"><div class="mi-num">1,000<sub>+</sub></div><div class="mi-lbl">Analyses in 4 days</div></div>
+          <div class="mi"><div class="mi-num">11</div><div class="mi-lbl">AWS Regions</div></div>
+          <div class="mi"><div class="mi-num">&lt;60<sub>s</sub></div><div class="mi-lbl">For 1,000+ intent bots</div></div>
+          <div class="mi"><div class="mi-num">12</div><div class="mi-lbl">LLMs benchmarked</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="proj-panel" data-panel>
+      <div class="proj-left">
+        <p class="proj-type">Cross-Service Feature</p>
+        <h3 class="proj-name">Multimodal Dialogue</h3>
+        <p class="proj-desc">SMS input capture during live voice (IVR) calls without interrupting the session. Extended bot channel APIs to integrate AWS End User Messaging with Amazon Connect.</p>
+        <p class="proj-desc">Evaluated native channel vs. Lambda-based extensibility. Chose control-plane-driven design for backward-compatible multi-channel growth. Delivered Private Beta across 4 teams.</p>
+      </div>
+      <div class="proj-right">
+        <div class="metrics-list">
+          <div class="mi"><div class="mi-num">4</div><div class="mi-lbl">Teams coordinated</div></div>
+          <div class="mi"><div class="mi-num">0</div><div class="mi-lbl">Call interruptions</div></div>
+          <div class="mi"><div class="mi-num" style="font-size:clamp(15px,1.6vw,20px);letter-spacing:0;line-height:1.3">Private<br>Beta</div><div class="mi-lbl">Enterprise shipped</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<div class="hr" style="margin:0 56px"></div>
+
+<!-- JOB 02 -->
+<article>
+  <div class="job-header" data-job="2">
+    <span class="job-idx">02</span>
+    <div>
+      <p class="job-company">Amazon Web Services</p>
+      <h2 class="job-title">AWS Lambda</h2>
+    </div>
+    <div class="job-date">Aug 2022<br>Jun 2024</div>
+  </div>
+  <div class="proj-panels">
+    <div class="proj-panel" data-panel>
+      <div class="proj-left">
+        <p class="proj-type">Infrastructure</p>
+        <h3 class="proj-name">Region Build Automation</h3>
+        <p class="proj-desc">Led automation of Lambda EventBridge control plane region builds — on the critical path for every new Lambda region launch. Replaced a fully manual expansion process, eliminating human error from the build sequence entirely.</p>
+        <p class="proj-desc">Redesigned orchestration model and CI/CD pipeline. Parallelized serial IA-gating tasks. Onboarded to automated region config and resource provisioning systems.</p>
+      </div>
+      <div class="proj-right">
+        <div class="metrics-list">
+          <div class="mi"><div class="mi-num">2.8<sub>×</sub></div><div class="mi-lbl">Build speed improvement</div></div>
+          <div class="mi"><div class="mi-num">14→5</div><div class="mi-lbl">Days per build</div></div>
+          <div class="mi"><div class="mi-num">0</div><div class="mi-lbl">Errors &amp; manual steps</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="proj-panel" data-panel>
+      <div class="proj-left">
+        <p class="proj-type">Reliability</p>
+        <h3 class="proj-name">Control Plane Throttling</h3>
+        <p class="proj-desc">Co-designed a multi-dimensional token bucket throttling system extending from account-level to Org ID and caller principal. Prevents cross-tenant traffic spikes from triggering availability incidents across the Lambda fleet.</p>
+        <p class="proj-desc">Per-host local token cache with async background sync to central data plane. Throttle decisions removed from the request hot path. Load tested at ~7× normal traffic.</p>
+      </div>
+      <div class="proj-right">
+        <div class="metrics-list">
+          <div class="mi"><div class="mi-num">&lt;25<sub>ms</sub></div><div class="mi-lbl">p99 latency overhead</div></div>
+          <div class="mi"><div class="mi-num">7<sub>×</sub></div><div class="mi-lbl">Traffic load tested</div></div>
+          <div class="mi"><div class="mi-num">50K<sub>+</sub></div><div class="mi-lbl">Throttle cache keys</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<div class="tech-footer" id="tech-footer">
+  <p class="tech-label">Technologies</p>
+  <p class="tech-text">
+    <em>Java</em> (Spring Boot) · <em>Python</em> · <em>AWS Step Functions</em> ·
+    <em>Amazon Bedrock</em> · <em>DynamoDB</em> · <em>S3</em> ·
+    <em>CloudFormation</em> · <em>CloudWatch</em> · <em>IAM</em>
+  </p>
+</div>
+
+<footer class="site-footer">
+  <span class="footer-copy">Han Cao — Work</span>
+  <span class="footer-copy">
+    <a href="projects.html" style="color:var(--gray-a);transition:color .3s"
+       onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--gray-a)'">Projects →</a>
+  </span>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+window.addEventListener('load', () => { document.body.classList.add('visible'); });
+
+/* ── Page header ── */
+gsap.from('.page-header', { opacity: 0, y: -20, duration: .7, ease: 'power3.out', delay: .1 });
+
+/*
+  ── JOB HEADER CHOREOGRAPHY ──
+  On scroll enter: index → company → title → date
+  Timing matches the markdown pattern: ~80–120ms between each element.
+*/
+document.querySelectorAll('[data-job]').forEach(header => {
+  const idx   = header.querySelector('.job-idx');
+  const co    = header.querySelector('.job-company');
+  const title = header.querySelector('.job-title');
+  const date  = header.querySelector('.job-date');
+
+  ScrollTrigger.create({
+    trigger: header,
+    start: 'top 78%',
+    once: true,
+    onEnter: () => {
+      const tl = gsap.timeline();
+      tl.to(idx,   { opacity: 1, duration: .4, ease: 'power2.out' })
+        .to(co,    { opacity: 1, y: 0, duration: .55, ease: 'power3.out' }, '-=.15')
+        .to(title, { opacity: 1, y: 0, duration: .7,  ease: 'power3.out' }, '-=.35')
+        .to(date,  { opacity: 1, duration: .5, ease: 'power2.out' }, '-=.45');
+    }
+  });
+});
+
+/*
+  ── PANEL CHOREOGRAPHY ──
+  On scroll enter: proj-type → proj-name → desc[0] → desc[1] → metrics
+  Each step: 80–130ms after the previous. Like laying cards on a table.
+*/
+document.querySelectorAll('[data-panel]').forEach(panel => {
+  const type    = panel.querySelector('.proj-type');
+  const name    = panel.querySelector('.proj-name');
+  const descs   = panel.querySelectorAll('.proj-desc');
+  const metrics = panel.querySelector('.metrics-list');
+
+  ScrollTrigger.create({
+    trigger: panel,
+    start: 'top 82%',
+    once: true,
+    onEnter: () => {
+      const tl = gsap.timeline();
+      tl.to(type,    { opacity: 1, duration: .45, ease: 'power2.out' })
+        .to(name,    { opacity: 1, y: 0, duration: .65, ease: 'power3.out' }, '-=.1')
+        .to(descs,   { opacity: 1, y: 0, duration: .6,  ease: 'power3.out', stagger: .12 }, '-=.3')
+        .to(metrics, { opacity: 1, x: 0, duration: .7,  ease: 'power3.out' }, '-=.5');
+    }
+  });
+});
+
+/* Tech footer */
+ScrollTrigger.create({
+  trigger: '#tech-footer', start: 'top 85%', once: true,
+  onEnter: () => gsap.to('#tech-footer', { opacity: 1, y: 0, duration: .7, ease: 'power3.out' })
+});
+
+/* Page transition */
+document.querySelectorAll('a[href$=".html"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const href = a.getAttribute('href');
+    document.body.style.transition = 'opacity .38s ease';
+    document.body.style.opacity = '0';
+    setTimeout(() => { window.location.href = href; }, 400);
+  });
+});
+</script>
+</body>
+</html>

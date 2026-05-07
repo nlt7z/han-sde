@@ -248,11 +248,109 @@ a.fcr-val {
 }
 
 /* ─────────────────────────────────────────────
+   HAMBURGER BUTTON
+───────────────────────────────────────────── */
+.nav-hamburger {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 0;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-end;
+  z-index: 201;
+}
+.nav-hamburger span {
+  display: block;
+  height: 1px;
+  background: var(--fg);
+  transition: width .3s ease, transform .3s ease, opacity .3s ease;
+}
+.nav-hamburger span:nth-child(1) { width: 22px; }
+.nav-hamburger span:nth-child(2) { width: 14px; }
+.nav-hamburger span:nth-child(3) { width: 22px; }
+.site-nav.nav-open .nav-hamburger span:nth-child(1) {
+  width: 22px;
+  transform: translateY(6px) rotate(45deg);
+}
+.site-nav.nav-open .nav-hamburger span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.site-nav.nav-open .nav-hamburger span:nth-child(3) {
+  width: 22px;
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* ─────────────────────────────────────────────
    RESPONSIVE
 ───────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .site-nav { padding: 22px 24px; }
-  .nav-list { gap: 20px; }
+  .site-nav { padding: 0 24px; }
+
+  .nav-hamburger { display: flex; }
+
+  .nav-list {
+    display: none;
+    position: absolute;
+    top: 72px; left: 0; right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: rgba(20,18,16,.97);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--line);
+    padding: 8px 24px 20px;
+  }
+  .site-nav.nav-open .nav-list { display: flex; }
+
+  .nav-list li {
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-list li:last-child { border-bottom: none; }
+
+  .nav-list li a {
+    display: block;
+    padding: 15px 0;
+    font-size: 12px;
+    letter-spacing: .1em;
+    color: var(--gray-a);
+  }
+  .nav-list li a:hover,
+  .nav-list li a.active { color: var(--fg); }
+  .nav-list li a::after { display: none; }
+
+  /* Simplify contact pill for mobile */
+  .contact-li { width: 100%; }
+  .contact-pill {
+    display: flex;
+    align-items: center;
+    border: none;
+    background: transparent;
+    padding: 15px 0;
+    width: 100%;
+    overflow: visible;
+  }
+  .contact-pill > * { grid-area: unset; }
+  .cp-spacer { display: none; }
+  .cp-front {
+    opacity: 1 !important;
+    transform: none !important;
+    color: var(--gray-a);
+    font-size: 12px;
+    letter-spacing: .1em;
+  }
+  .contact-li:hover .cp-front {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .cp-back { display: none; }
+  .contact-li:hover .contact-pill {
+    background: transparent;
+    border-color: transparent;
+  }
+
   .site-footer {
     grid-template-columns: 1fr; gap: 48px;
     padding: 56px 24px 64px;

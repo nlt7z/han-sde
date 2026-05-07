@@ -110,7 +110,7 @@ export default function Work() {
           />
           <ProjPanel
             type="Cross-Service Feature"
-            name="Multimodal Dialogue"
+            name="Multi-modal Conversation"
             descs={[
               'SMS input capture during live voice (IVR) calls without interrupting the session. Extended bot channel APIs to integrate AWS End User Messaging with Amazon Connect.',
               'Evaluated native channel vs. Lambda-based extensibility. Chose control-plane-driven design for backward-compatible multi-channel growth. Delivered Private Beta across 4 teams.',

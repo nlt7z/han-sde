@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Work — Han Cao</title>
 <link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 <style>
@@ -171,9 +172,21 @@ body { padding-top: 72px; } /* nav height */
   <a href="index.html" class="nav-logo">Han Cao</a>
   <ul class="nav-list">
     <li><a href="work.html" class="active">Work</a></li>
-    <li><a href="projects.html">Projects</a></li>
-    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="projects.html">Patents</a></li>
+    <li><a href="gallery.html">Skills</a></li>
     <li><a href="about.html">About</a></li>
+    <li class="contact-li">
+      <div class="contact-pill">
+        <div class="cp-spacer" aria-hidden="true">hanmail1024@gmail.com &nbsp;<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></div>
+        <span class="cp-front">Contact</span>
+        <span class="cp-back">
+          <span>hanmail1024@gmail.com</span>
+          <button class="cp-copy" title="Copy email">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </span>
+      </div>
+    </li>
   </ul>
 </nav>
 
@@ -183,7 +196,6 @@ body { padding-top: 72px; } /* nav height */
     <h1 class="t-title">Work</h1>
     <span class="t-label">2 positions &nbsp;·&nbsp; 3+ years</span>
   </div>
-  <div class="hr" style="margin-top:32px"></div>
 </header>
 
 <!-- JOB 01 -->
@@ -216,7 +228,7 @@ body { padding-top: 72px; } /* nav height */
     <div class="proj-panel" data-panel>
       <div class="proj-left">
         <p class="proj-type">Cross-Service Feature</p>
-        <h3 class="proj-name">Multimodal Dialogue</h3>
+        <h3 class="proj-name">Multi-modal Conversation</h3>
         <p class="proj-desc">SMS input capture during live voice (IVR) calls without interrupting the session. Extended bot channel APIs to integrate AWS End User Messaging with Amazon Connect.</p>
         <p class="proj-desc">Evaluated native channel vs. Lambda-based extensibility. Chose control-plane-driven design for backward-compatible multi-channel growth. Delivered Private Beta across 4 teams.</p>
       </div>
@@ -230,8 +242,6 @@ body { padding-top: 72px; } /* nav height */
     </div>
   </div>
 </article>
-
-<div class="hr" style="margin:0 56px"></div>
 
 <!-- JOB 02 -->
 <article>
@@ -287,11 +297,19 @@ body { padding-top: 72px; } /* nav height */
 </div>
 
 <footer class="site-footer">
-  <span class="footer-copy">Han Cao — Work</span>
-  <span class="footer-copy">
-    <a href="projects.html" style="color:var(--gray-a);transition:color .3s"
-       onmouseover="this.style.color='var(--fg)'" onmouseout="this.style.color='var(--gray-a)'">Projects →</a>
-  </span>
+  <div class="footer-left">
+    <a href="index.html" class="footer-name">Han Cao</a>
+  </div>
+  <div class="footer-right">
+    <div class="footer-contact-row">
+      <span class="fcr-label">Email</span>
+      <a href="mailto:hanmail1024@gmail.com" class="fcr-val">hanmail1024@gmail.com</a>
+    </div>
+    <div class="footer-contact-row">
+      <span class="fcr-label">LinkedIn</span>
+      <a href="https://linkedin.com/in/han-ca0" class="fcr-val">han-ca0</a>
+    </div>
+  </div>
 </footer>
 
 <script>
@@ -355,6 +373,18 @@ document.querySelectorAll('[data-panel]').forEach(panel => {
 ScrollTrigger.create({
   trigger: '#tech-footer', start: 'top 85%', once: true,
   onEnter: () => gsap.to('#tech-footer', { opacity: 1, y: 0, duration: .7, ease: 'power3.out' })
+});
+
+document.querySelectorAll('.cp-copy').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    navigator.clipboard.writeText('hanmail1024@gmail.com').then(() => {
+      const prev = btn.innerHTML;
+      btn.innerHTML = '✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.innerHTML = prev; btn.classList.remove('copied'); }, 2000);
+    });
+  });
 });
 
 /* Page transition */

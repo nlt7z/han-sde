@@ -3,7 +3,9 @@
     "allow": [
       "Bash(npm install *)",
       "Bash(npm run *)",
-      "Bash(curl -s http://localhost:5173)"
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(awk '{print $5, $9}')",
+      "Bash(awk '$5 > 15000000 {print $5, $9}')"
     ]
   }
 }

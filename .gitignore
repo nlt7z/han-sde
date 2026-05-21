@@ -1,0 +1,17 @@
+# OS
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+
+# Local editor / tool settings
+.claude/
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*

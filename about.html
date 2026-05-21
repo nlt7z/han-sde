@@ -3,418 +3,282 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About Me — Han Cao</title>
+<title>About — Han Cao</title>
+<link rel="icon" type="image/png" href="images/logo.png">
+<link rel="apple-touch-icon" href="images/logo.png">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<style>
-body { padding-top: 72px; }
-
-.reveal {
-  opacity: 0; transform: translateY(22px);
-  transition: opacity .85s cubic-bezier(.22,1,.36,1), transform .85s cubic-bezier(.22,1,.36,1);
-}
-.reveal.visible { opacity: 1; transform: translateY(0); }
-.reveal.d1 { transition-delay: .12s; }
-.reveal.d2 { transition-delay: .24s; }
-.reveal.d3 { transition-delay: .36s; }
-
-/* ── PAGE HEADER ── */
-.page-header { padding: 56px 56px 64px; }
-.page-eyebrow {
-  font-size: 10px; font-weight: 500;
-  letter-spacing: .18em; text-transform: uppercase;
-  color: var(--orange); margin-bottom: 18px;
-}
-
-/* ── BIO ── */
-.bio-section {
-  padding: 0 56px 72px;
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 0 80px;
-  border-top: 1px solid var(--line);
-  padding-top: 64px;
-}
-.bio-lead {
-  font-family: var(--serif); font-weight: 300; font-style: italic;
-  font-size: clamp(22px, 2.5vw, 32px);
-  line-height: 1.45; letter-spacing: -.01em;
-  color: var(--fg); margin-bottom: 28px;
-  transition: color .4s ease;
-}
-.bio-lead:hover { color: var(--orange); }
-.bio-body {
-  font-size: 15px; font-weight: 300;
-  line-height: 1.82; color: var(--gray-a); max-width: 560px;
-}
-.bio-body p + p { margin-top: 18px; }
-
-.bio-aside {
-  padding-top: 4px;
-  border-left: 1px solid var(--line);
-  padding-left: 48px;
-  display: flex; flex-direction: column; gap: 28px;
-}
-.fact-label {
-  font-size: 10px; font-weight: 500;
-  letter-spacing: .14em; text-transform: uppercase;
-  color: var(--gray-b); margin-bottom: 6px;
-}
-.fact-value {
-  font-size: 13px; font-weight: 300;
-  color: var(--gray-a); line-height: 1.6;
-}
-.fact-value a {
-  color: var(--gray-a); transition: color .3s;
-  text-decoration: underline; text-underline-offset: 3px;
-  text-decoration-color: var(--gray-b);
-}
-.fact-value a:hover { color: var(--fg); }
-.fact-value strong { color: var(--fg); font-weight: 400; }
-
-/* ── PERSONAL — interests + gallery ── */
-.personal-section {
-  padding: 0 56px 72px;
-  border-top: 1px solid var(--line);
-  padding-top: 64px;
-}
-.section-head {
-  font-size: 10px; font-weight: 500;
-  letter-spacing: .18em; text-transform: uppercase;
-  color: var(--gray-b); margin-bottom: 44px;
-}
-
-.interests-row {
-  display: flex; gap: 12px; flex-wrap: wrap;
-  margin-bottom: 52px;
-}
-.interest-pill {
-  padding: 10px 22px;
-  border: 1px solid var(--line-hi);
-  font-size: 13px; font-weight: 300;
-  color: var(--gray-a);
-  transition: border-color .3s, color .3s, background .3s;
-}
-.interest-pill:hover {
-  border-color: var(--orange);
-  color: var(--fg);
-  background: rgba(212,96,0,.05);
-}
-.interest-pill strong { color: var(--fg); font-weight: 400; }
-
-/* Photo gallery grid */
-.personal-gallery {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 2px;
-}
-.pg-cell {
-  position: relative; overflow: hidden;
-  aspect-ratio: 4/3;
-  opacity: 0; transform: translateY(24px);
-  will-change: transform, opacity;
-}
-.pg-cell.in {
-  opacity: 1; transform: translateY(0);
-  transition: opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1);
-}
-.pg-cell.wide { grid-column: span 2; aspect-ratio: 16/9; }
-.pg-cell img {
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
-  transition: transform .6s ease;
-}
-.pg-cell:hover img { transform: scale(1.04); }
-
-/* Gradient placeholders */
-.ph-a { background: linear-gradient(135deg, #1c1512 0%, #2e2318 100%); }
-.ph-b { background: linear-gradient(160deg, #0e1018 0%, #1a2030 100%); }
-.ph-c { background: linear-gradient(120deg, #181210 0%, #302218 100%); }
-.ph-d { background: linear-gradient(200deg, #121614 0%, #1e2e28 100%); }
-.ph-e { background: linear-gradient(135deg, #161215 0%, #281f30 100%); }
-.ph-f { background: linear-gradient(160deg, #141018 0%, #241a30 100%); }
-
-.pg-hint {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  color: rgba(242,237,229,.14);
-  font-size: 9px; letter-spacing: .18em; text-transform: uppercase;
-}
-.pg-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(14,12,10,.6) 0%, transparent 50%);
-  opacity: 0; transition: opacity .4s;
-  display: flex; align-items: flex-end; padding: 16px 18px;
-}
-.pg-cell:hover .pg-overlay { opacity: 1; }
-.pg-overlay-text {
-  font-family: var(--serif); font-size: 14px; font-style: italic;
-  color: var(--fg); font-weight: 300;
-}
-
-/* ── EDUCATION ── */
-.edu-section {
-  padding: 0 56px 72px;
-  border-top: 1px solid var(--line);
-  padding-top: 64px;
-}
-.edu-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: baseline;
-  gap: 0 48px;
-  padding: 28px 0;
-  border-bottom: 1px solid var(--line);
-}
-.edu-row:first-of-type { border-top: 1px solid var(--line); }
-.edu-school {
-  font-family: var(--serif); font-weight: 400;
-  font-size: clamp(20px, 2vw, 28px);
-  letter-spacing: -.01em; margin-bottom: 6px;
-  transition: color .35s ease;
-}
-.edu-row:hover .edu-school { color: var(--orange); }
-.edu-degree { font-size: 13px; font-weight: 300; color: var(--gray-a); margin-bottom: 4px; }
-.edu-gpa { font-size: 12px; color: var(--orange); letter-spacing: .04em; }
-.edu-year { font-size: 12px; font-weight: 300; color: var(--gray-b); letter-spacing: .06em; white-space: nowrap; }
-
-/* ── CONTACT ── */
-.contact-section {
-  padding: 64px 56px 100px;
-  border-top: 1px solid var(--line);
-  text-align: center;
-}
-.contact-headline {
-  font-family: var(--serif); font-weight: 300; font-style: italic;
-  font-size: clamp(36px, 5vw, 68px);
-  line-height: 1; letter-spacing: -.02em; margin-bottom: 20px;
-  transition: color .4s ease;
-}
-.contact-headline:hover { color: var(--orange); }
-.contact-sub {
-  font-size: 14px; font-weight: 300;
-  color: var(--gray-a); max-width: 420px; line-height: 1.7;
-  margin: 0 auto;
-}
-
-@media (max-width: 900px) {
-  .bio-section { grid-template-columns: 1fr; }
-  .bio-aside { border-left: none; padding-left: 0; border-top: 1px solid var(--line); padding-top: 36px; flex-direction: row; flex-wrap: wrap; gap: 28px; }
-  .personal-gallery { grid-template-columns: 1fr 1fr; }
-  .pg-cell.wide { grid-column: span 2; }
-  .contact-section { grid-template-columns: 1fr; gap: 48px; }
-}
-@media (max-width: 768px) {
-  .page-header { padding: 40px 24px 56px; }
-  .bio-section, .personal-section, .edu-section, .contact-section {
-    padding-left: 24px; padding-right: 24px;
-  }
-  .personal-gallery { grid-template-columns: 1fr 1fr; gap: 2px; }
-  .pg-cell.wide { grid-column: span 2; }
-}
-</style>
 </head>
 <body>
 
-<nav class="site-nav">
-  <a href="index.html" class="nav-logo">Han Cao</a>
-  <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-  <ul class="nav-list">
-    <li><a href="work.html">Work</a></li>
-    <li><a href="projects.html">Patents</a></li>
-    <li><a href="gallery.html">Skills</a></li>
-    <li><a href="about.html" class="active">About</a></li>
-    <li class="contact-li">
-      <div class="contact-pill">
-        <div class="cp-spacer" aria-hidden="true">hanmail1024@gmail.com &nbsp;<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></div>
-        <span class="cp-front">Contact</span>
-        <span class="cp-back">
-          <span>hanmail1024@gmail.com</span>
-          <button class="cp-copy" title="Copy email">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-          </button>
-        </span>
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="Han Cao — home"><img src="images/logo.png" alt="Han Cao"></a>
+    <ul class="nav-links">
+      <li><a href="work.html">Work</a></li>
+      <li><a href="projects.html">Patents</a></li>
+      <li><a href="gallery.html">Skills</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div class="contact-li">
+        <div class="contact-pill" role="button" tabindex="0" aria-label="Contact — click to reveal email">
+          <span class="cp-front">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <span>Contact</span>
+          </span>
+          <span class="cp-back">
+            <span>hanmail1024@gmail.com</span>
+            <button class="cp-copy" title="Copy email" aria-label="Copy email to clipboard">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+          </span>
+        </div>
       </div>
-    </li>
-  </ul>
+      <button class="nav-mobile-toggle" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
 </nav>
 <script src="nav.js"></script>
 
-<header class="page-header reveal">
-  <p class="page-eyebrow">Background</p>
-  <h1 class="t-title">About Me</h1>
-</header>
-
-<!-- BIO -->
-<section class="bio-section">
-  <div class="bio-text reveal">
-    <p class="bio-lead">
-      Software engineer who builds infrastructure and AI systems that millions of people depend on.
-    </p>
-    <div class="bio-body">
-      <p>
-        Han Cao is a software development engineer at Amazon with 3+ years building
-        production systems at scale. Currently at Amazon Lex, where he shipped Bot
-        Analyzer — a publicly available AI feature that went live across 11 AWS regions
-        and saw 1,000+ analyses in its first four days.
-      </p>
-      <p>
-        Previously at AWS Lambda, he led the automation of the Lambda EventBridge control
-        plane region builds — replacing a fully manual process — and co-designed the
-        multi-dimensional token bucket throttling system that protects the Lambda fleet
-        from cross-tenant traffic spikes.
-      </p>
-      <p>
-        He holds an M.S. in Computer Science from Northwestern University (GPA 3.86) and
-        a B.S. from Simon Fraser University. He holds three professional certifications
-        from AWS and Oracle, and has published academic research and holds a granted patent.
-      </p>
-    </div>
+<!-- ── PAGE HEAD ── -->
+<section class="page-head">
+  <img class="page-head-decor" src="images/decor3.png" alt="" aria-hidden="true">
+  <div class="page-head-inner">
+    <span class="page-head-eyebrow">// about</span>
+    <h1 class="page-title">Engineer who designs<br>the thing he <em>ships</em>.</h1>
+    <p class="page-head-sub">AI infrastructure engineer building production gen AI features and distributed control planes at AWS scale.</p>
   </div>
-  <div class="bio-aside reveal d2">
-    <div class="fact-block">
-      <div class="fact-label">Location</div>
-      <div class="fact-value">Seattle, Washington</div>
-    </div>
-    <div class="fact-block">
-      <div class="fact-label">Currently</div>
-      <div class="fact-value"><strong>Amazon Web Services</strong><br>SDE, Generative AI</div>
-    </div>
-    <div class="fact-block">
-      <div class="fact-label">Languages</div>
-      <div class="fact-value">English, Mandarin</div>
-    </div>
-    <div class="fact-block">
-      <div class="fact-label">LinkedIn</div>
-      <div class="fact-value"><a href="https://linkedin.com/in/han-ca0">han-ca0</a></div>
+</section>
+
+<!-- ── BIO + ASIDE ── -->
+<section class="section">
+  <div class="section-inner" style="max-width:1080px;">
+    <div style="display:grid;grid-template-columns:1fr 320px;gap:80px;" class="bio-grid">
+      <div>
+        <p class="section-lede" style="margin-bottom:28px;">
+          Software development engineer at Amazon, three-plus years building production systems at scale.
+        </p>
+        <div class="section-body">
+          <p>Currently at Amazon Lex, where I shipped <strong>Bot Analyzer</strong> — a publicly available AI feature live across 11 AWS regions, with 1,000+ analyses in its first four days.</p>
+          <p>Previously at AWS Lambda, I led automation of the Lambda EventBridge control plane region builds — replacing a fully manual process — and co-designed the multi-dimensional token bucket throttling system that protects the Lambda fleet from cross-tenant traffic spikes.</p>
+          <p>M.S. in Computer Science from Northwestern (GPA 3.86), B.S. from Simon Fraser. Three professional certifications from AWS and Oracle. Published academic research, one granted patent.</p>
+        </div>
+      </div>
+      <dl class="kv-list">
+        <div class="kv-row">
+          <dt>Location</dt>
+          <dd>Seattle, Washington</dd>
+        </div>
+        <div class="kv-row">
+          <dt>Currently</dt>
+          <dd><strong>Amazon Web Services</strong><br>SDE · Gen AI &amp; Infrastructure</dd>
+        </div>
+        <div class="kv-row">
+          <dt>Languages</dt>
+          <dd>English · Mandarin</dd>
+        </div>
+        <div class="kv-row">
+          <dt>LinkedIn</dt>
+          <dd><a href="https://linkedin.com/in/han-ca0" target="_blank" rel="noopener">han-ca0</a></dd>
+        </div>
+      </dl>
     </div>
   </div>
 </section>
 
-<!-- PERSONAL -->
-<section class="personal-section">
-  <p class="section-head">When I'm Not Coding</p>
-
-  <div class="interests-row reveal">
-    <div class="interest-pill"><strong>Video Games</strong></div>
-    <div class="interest-pill"><strong>Photography</strong></div>
-    <div class="interest-pill"><strong>Travel</strong></div>
+<!-- ── NOW SNAPSHOT ── -->
+<section class="section">
+  <div class="section-inner" style="max-width:1080px;">
+    <span class="section-eyebrow">// snapshot · 2026.05</span>
+    <h2 class="section-title">Now.</h2>
+    <ul class="now-list">
+      <li class="now-list-row live">
+        <div class="now-list-key"><span class="nlk-dot"></span>Currently shipping</div>
+        <div class="now-list-val"><strong>amazon-lex / bot-analyzer</strong> — multi-region rollout, gen-AI analysis features.</div>
+      </li>
+      <li class="now-list-row">
+        <div class="now-list-key"><span class="nlk-dot"></span>Open for</div>
+        <div class="now-list-val">Senior SDE · staff engineering · AI infrastructure.</div>
+      </li>
+      <li class="now-list-row">
+        <div class="now-list-key"><span class="nlk-dot"></span>Building</div>
+        <div class="now-list-val">This portfolio (hand-rolled, no framework) · personal infra experiments.</div>
+      </li>
+      <li class="now-list-row">
+        <div class="now-list-key"><span class="nlk-dot"></span>Reading</div>
+        <div class="now-list-val"><strong>Designing Data-Intensive Applications</strong> — Kleppmann.</div>
+      </li>
+      <li class="now-list-row">
+        <div class="now-list-key"><span class="nlk-dot"></span>Learning</div>
+        <div class="now-list-val">Bedrock guardrails · agentic workflows · cost-aware LLM routing.</div>
+      </li>
+    </ul>
   </div>
+</section>
 
-  <!-- Photo placeholders — replace src="" with actual photo paths -->
-  <div class="personal-gallery">
-    <div class="pg-cell wide" id="pg-1">
-      <img src="0V4A7677.JPG" alt="Olympic National Park">
-      <div class="pg-overlay"><span class="pg-overlay-text">Olympic</span></div>
+<!-- ── INTERESTS + PHOTO GALLERY ── -->
+<section class="section">
+  <div class="section-inner" style="max-width:1080px;">
+    <span class="section-eyebrow">// when i'm not coding</span>
+    <h2 class="section-title">Out of the office.</h2>
+    <div class="tag-row" style="margin-bottom:36px;">
+      <span class="tag primary">Video Games</span>
+      <span class="tag primary">Photography</span>
+      <span class="tag primary">Travel</span>
     </div>
-    <div class="pg-cell" id="pg-2">
-      <img src="0V4A7725.jpg" alt="Olympic National Park">
-      <div class="pg-overlay"><span class="pg-overlay-text">Olympic</span></div>
-    </div>
-    <div class="pg-cell" id="pg-3">
-      <img src="0V4A8491.JPG" alt="La Jolla">
-      <div class="pg-overlay"><span class="pg-overlay-text">La Jolla</span></div>
-    </div>
-    <div class="pg-cell" id="pg-4">
-      <img src="0V4A8453.jpg" alt="La Jolla Sunset">
-      <div class="pg-overlay"><span class="pg-overlay-text">La Jolla</span></div>
-    </div>
-    <div class="pg-cell" id="pg-5">
-      <img src="0V4A8526.JPG" alt="La Jolla">
-      <div class="pg-overlay"><span class="pg-overlay-text">La Jolla</span></div>
+    <div class="photo-grid">
+      <div class="photo-cell wide">
+        <img src="images/olympic-01.jpg" alt="Olympic National Park">
+        <span class="photo-cap">olympic_np</span>
+      </div>
+      <div class="photo-cell">
+        <img src="images/olympic-02.jpg" alt="Olympic National Park">
+        <span class="photo-cap">olympic_np</span>
+      </div>
+      <div class="photo-cell">
+        <img src="images/la-jolla-01.jpg" alt="La Jolla">
+        <span class="photo-cap">la_jolla</span>
+      </div>
+      <div class="photo-cell">
+        <img src="images/la-jolla-sunset.jpg" alt="La Jolla Sunset">
+        <span class="photo-cap">la_jolla / sunset</span>
+      </div>
+      <div class="photo-cell">
+        <img src="images/la-jolla-02.jpg" alt="La Jolla">
+        <span class="photo-cap">la_jolla</span>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- EDUCATION -->
-<section class="edu-section">
-  <p class="section-head">Education</p>
-  <div class="edu-row reveal">
+<!-- ── EDUCATION ── -->
+<section class="section">
+  <div class="section-inner" style="max-width:1080px;">
+    <span class="section-eyebrow">// education</span>
+    <h2 class="section-title">Schooling.</h2>
+    <ul class="line-list">
+      <li class="line-row">
+        <div class="line-name">
+          Northwestern University
+          <span class="line-sub">M.S. Computer Science</span>
+          <span class="line-gpa">GPA 3.86 / 4.0</span>
+        </div>
+        <span class="line-aside">2020 — 2022</span>
+      </li>
+      <li class="line-row">
+        <div class="line-name">
+          Simon Fraser University
+          <span class="line-sub">B.S. Computer Science · Minor in Mathematics</span>
+        </div>
+        <span class="line-aside">2017 — 2020</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── CTA — editorial closing spread ── -->
+<section class="section cta-klein" id="contact-cta">
+  <div class="cta-inner">
+    <div class="cta-top">
+      <span class="cta-eyebrow">— Closing remarks</span>
+      <span class="cta-edition">Ed. 01 / 2026 · Seattle</span>
+    </div>
+    <div class="cta-headline-row">
+      <h2 class="cta-headline">
+        Let's ship<br>
+        something <em>real</em>.
+      </h2>
+      <span class="cta-status">
+        <span class="cta-status-dot"></span>
+        Open for Senior &amp; Staff roles
+      </span>
+    </div>
+    <hr class="cta-rule">
+    <dl class="cta-meta">
+      <div class="cta-meta-row">
+        <dt>Role</dt>
+        <dd>Senior / Staff SDE · AI infrastructure</dd>
+      </div>
+      <div class="cta-meta-row">
+        <dt>Located</dt>
+        <dd>Seattle, WA · Pacific Time</dd>
+      </div>
+      <div class="cta-meta-row cta-meta-link">
+        <dt>Email</dt>
+        <dd><a href="mailto:hanmail1024@gmail.com">hanmail1024@gmail.com<span class="cta-arrow">↗</span></a></dd>
+      </div>
+      <div class="cta-meta-row cta-meta-link">
+        <dt>LinkedIn</dt>
+        <dd><a href="https://linkedin.com/in/han-ca0" target="_blank" rel="noopener">linkedin.com/in/han-ca0<span class="cta-arrow">↗</span></a></dd>
+      </div>
+    </dl>
+    <p class="cta-sign">— Han Cao</p>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="footer-inner">
     <div>
-      <div class="edu-school">Northwestern University</div>
-      <div class="edu-degree">M.S. Computer Science</div>
-      <div class="edu-gpa">GPA 3.86 / 4.0</div>
+      <a href="index.html" class="footer-name footer-name--logo" aria-label="Han Cao — home">
+        <img src="images/logo.png" alt="Han Cao" class="footer-logo">
+      </a>
+      <p class="footer-tag">Software engineer · Amazon Web Services · Seattle, Washington.</p>
     </div>
-    <span class="edu-year">2020 – 2022</span>
-  </div>
-  <div class="edu-row reveal d1">
-    <div>
-      <div class="edu-school">Simon Fraser University</div>
-      <div class="edu-degree">B.S. Computer Science &nbsp;·&nbsp; Minor in Mathematics</div>
+    <div class="footer-col">
+      <h4>Inside</h4>
+      <ul>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="projects.html">Patents</a></li>
+        <li><a href="gallery.html">Skills</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
     </div>
-    <span class="edu-year">2017 – 2020</span>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section class="contact-section">
-  <div class="reveal">
-    <h2 class="contact-headline">Let's build<br>something.</h2>
-    <p class="contact-sub">
-      Open to senior SDE roles, staff engineering, and ambitious technical challenges.
-    </p>
-  </div>
-</section>
-
-<footer class="site-footer">
-  <div class="footer-left">
-    <a href="index.html" class="footer-name">Han Cao</a>
-  </div>
-  <div class="footer-right">
-    <div class="footer-contact-row">
-      <span class="fcr-label">Email</span>
-      <a href="mailto:hanmail1024@gmail.com" class="fcr-val">hanmail1024@gmail.com</a>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:hanmail1024@gmail.com">hanmail1024@gmail.com</a></li>
+        <li><a href="https://linkedin.com/in/han-ca0" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
     </div>
-    <div class="footer-contact-row">
-      <span class="fcr-label">LinkedIn</span>
-      <a href="https://linkedin.com/in/han-ca0" class="fcr-val">han-ca0</a>
-    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Han Cao</span>
+    <span>Built by hand · Seattle · PST</span>
   </div>
 </footer>
 
 <script>
-window.addEventListener('load', () => { document.body.classList.add('visible'); });
-
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
-  });
-}, { threshold: .1 });
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-/* Photo gallery stagger */
-const pgCells = document.querySelectorAll('.pg-cell');
-const pgIO = new IntersectionObserver(entries => {
-  if (entries[0].isIntersecting) {
-    pgCells.forEach((c, i) => setTimeout(() => c.classList.add('in'), i * 90));
-    pgIO.disconnect();
-  }
-}, { threshold: .1 });
-if (pgCells.length) pgIO.observe(pgCells[0]);
-
-document.querySelectorAll('.cp-copy').forEach(btn => {
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
-    navigator.clipboard.writeText('hanmail1024@gmail.com').then(() => {
-      const prev = btn.innerHTML;
-      btn.innerHTML = '✓';
-      btn.classList.add('copied');
-      setTimeout(() => { btn.innerHTML = prev; btn.classList.remove('copied'); }, 2000);
+(function() {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduced) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.section, .now-list-row, .line-row, .photo-cell').forEach(el => {
+      el.classList.add('reveal');
+      io.observe(el);
     });
-  });
-});
-
-document.querySelectorAll('a[href$=".html"]').forEach(a => {
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    const href = a.getAttribute('href');
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity .4s ease';
-    setTimeout(() => window.location.href = href, 420);
-  });
-});
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+  }
+})();
 </script>
+
+<style>
+@media (max-width: 800px) {
+  .bio-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+}
+</style>
 </body>
 </html>

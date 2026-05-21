@@ -3,587 +3,169 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Han Cao</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Han Cao — Software Engineer</title>
+<link rel="icon" type="image/png" href="images/logo.png">
+<link rel="apple-touch-icon" href="images/logo.png">
 <link rel="stylesheet" href="style.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-<style>
-/* ── ORBS ── */
-@keyframes drift-1 {
-  0%,100% { transform: translate(0,0) scale(1); }
-  30%     { transform: translate(-3%,5%) scale(1.07); }
-  65%     { transform: translate(5%,-3%) scale(0.93); }
-}
-@keyframes drift-2 {
-  0%,100% { transform: translate(0,0) scale(1); }
-  35%     { transform: translate(6%,-4%) scale(0.95); }
-  70%     { transform: translate(-4%,6%) scale(1.05); }
-}
-.orb-wrap {
-  position: fixed; inset: 0;
-  pointer-events: none; z-index: 0; overflow: hidden;
-}
-.orb {
-  position: absolute; border-radius: 50%;
-}
-.orb-1 {
-  width: 900px; height: 900px;
-  top: -320px; right: -280px;
-  background: radial-gradient(circle, rgba(212,96,0,.2) 0%, rgba(212,96,0,.06) 45%, transparent 70%);
-  filter: blur(90px);
-  animation: drift-1 24s ease-in-out infinite;
-}
-.orb-2 {
-  width: 640px; height: 640px;
-  bottom: -220px; left: -160px;
-  background: radial-gradient(circle, rgba(180,52,0,.14) 0%, transparent 70%);
-  filter: blur(80px);
-  animation: drift-2 32s ease-in-out infinite;
-}
-
-/* ── NOISE ── */
-.noise {
-  position: fixed; inset: 0;
-  pointer-events: none; z-index: 1; opacity: .038;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 256px 256px;
-}
-
-/* ── ANIMATED GRADIENT FLOW ── */
-@keyframes grad-shift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-.hero-grad-flow {
-  position: absolute; inset: 0;
-  background: linear-gradient(
-    -45deg,
-    rgba(212,96,0,.12) 0%,
-    transparent 25%,
-    rgba(180,50,0,.09) 50%,
-    transparent 75%,
-    rgba(220,80,0,.11) 100%
-  );
-  background-size: 400% 400%;
-  animation: grad-shift 16s ease infinite;
-  pointer-events: none; z-index: 0;
-}
-
-/* ── CURSOR-TRACKING GRADIENT ── */
-.hero-grad-cursor {
-  position: absolute; inset: 0;
-  pointer-events: none; z-index: 0;
-  opacity: 0;
-  transition: opacity .55s ease;
-  background: radial-gradient(
-    580px circle at var(--gx, 50%) var(--gy, 50%),
-    rgba(212,96,0,.38) 0%,
-    rgba(200,70,0,.2) 22%,
-    rgba(160,40,0,.09) 44%,
-    transparent 68%
-  );
-}
-.hero-grad-cursor.active { opacity: 1; }
-
-/* ── HERO NOISE ── */
-.hero-noise {
-  position: absolute; inset: 0;
-  pointer-events: none; z-index: 1; opacity: .06;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
-  mix-blend-mode: overlay;
-}
-
-/* ── HERO STRUCTURAL GRID ── */
-.hero-grid {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  overflow: hidden;
-  opacity: 0; transition: opacity 1.4s ease .5s;
-}
-body.visible .hero-grid { opacity: 1; }
-
-/* Vertical column dividers */
-.hg-v {
-  position: absolute; top: 0; bottom: 0; width: 1px;
-  background: linear-gradient(to bottom,
-    transparent 0%,
-    rgba(242,237,229,.07) 8%,
-    rgba(242,237,229,.07) 92%,
-    transparent 100%
-  );
-}
-/* Horizontal row divider */
-.hg-h {
-  position: absolute; left: 0; right: 0; height: 1px;
-  background: linear-gradient(to right,
-    transparent 0%,
-    rgba(242,237,229,.07) 5%,
-    rgba(242,237,229,.07) 95%,
-    transparent 100%
-  );
-}
-/* Orange square accents at intersections */
-.hg-dot {
-  position: absolute; width: 4px; height: 4px;
-  background: var(--orange);
-  transform: translate(-50%, -50%);
-}
-/* L-bracket corner markers */
-.hg-corner {
-  position: absolute; width: 14px; height: 14px;
-  border: 1px solid rgba(242,237,229,.2);
-}
-.hg-tl { top: 72px; left: 56px; border-right: none; border-bottom: none; }
-.hg-tr { top: 72px; right: 56px; border-left: none; border-bottom: none; }
-.hg-bl { bottom: 88px; left: 56px; border-right: none; border-top: none; }
-.hg-br { bottom: 88px; right: 56px; border-left: none; border-top: none; }
-/* Small corner glyphs */
-.hg-glyph {
-  position: absolute;
-  font-size: 9px; line-height: 1;
-  color: rgba(242,237,229,.16);
-  font-family: var(--sans); font-weight: 400;
-  letter-spacing: 0;
-}
-
-/* ── HERO ── */
-#hero {
-  position: relative; z-index: 2;
-  height: 100vh; min-height: 700px;
-  padding: 72px 56px 88px;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  overflow: hidden;
-}
-
-/* Open to Work badge */
-.open-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 7px 16px;
-  border-radius: 100px;
-  border: 1px solid rgba(212,96,0,.5);
-  background: rgba(212,96,0,.09);
-  font-size: 10px; font-weight: 400;
-  letter-spacing: .16em; text-transform: uppercase;
-  color: var(--orange);
-  margin-top: 48px;
-  width: fit-content;
-  justify-self: start;
-  opacity: 0; transform: translateY(-10px);
-  transition: opacity .7s ease .1s, transform .7s ease .1s;
-}
-body.visible .open-badge { opacity: 1; transform: translateY(0); }
-
-@keyframes badge-blink {
-  0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(212,96,0,.55); }
-  55%     { opacity: .5; box-shadow: 0 0 0 5px rgba(212,96,0,0); }
-}
-.badge-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--orange);
-  flex-shrink: 0;
-  animation: badge-blink 2s ease-in-out infinite;
-}
-
-/* Name */
-.hero-main {
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 32px 0;
-}
-#hero-name {
-  font-family: var(--serif);
-  font-weight: 300; font-style: italic;
-  font-size: clamp(96px, 14.5vw, 210px);
-  line-height: .84; letter-spacing: -.035em;
-  color: var(--fg);
-}
-.name-line { display: block; overflow: hidden; padding-bottom: .06em; }
-.name-inner {
-  display: block;
-  transform: translateY(110%);
-  transition: transform 1.1s cubic-bezier(.16,1,.3,1);
-}
-.name-line:nth-child(1) .name-inner { transition-delay: .08s; }
-.name-line:nth-child(2) .name-inner { transition-delay: .2s; }
-body.visible .name-inner { transform: translateY(0); }
-
-/* Orange line — opacity-only reveal, no transform */
-.hero-line {
-  width: 75%; height: 1px;
-  background: linear-gradient(to right, var(--orange), rgba(212,96,0,.2));
-  margin-top: 52px;
-  flex-shrink: 0;
-  opacity: 0;
-  transition: opacity .9s ease .8s;
-}
-body.visible .hero-line { opacity: 1; }
-
-/* Work roles */
-.hero-roles {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 48px;
-  margin-top: 40px;
-  opacity: 0; transform: translateY(14px);
-  transition: opacity .8s ease .95s, transform .8s ease .95s;
-}
-body.visible .hero-roles { opacity: 1; transform: translateY(0); }
-.hero-role-co {
-  font-size: 9px; font-weight: 500;
-  letter-spacing: .2em; text-transform: uppercase;
-  color: var(--orange); margin-bottom: 7px;
-}
-.hero-role-title {
-  font-size: 12px; font-weight: 400;
-  letter-spacing: .05em; color: var(--fg); margin-bottom: 4px;
-}
-.hero-role-period { font-size: 10px; color: var(--gray-b); letter-spacing: .06em; }
-
-/* Hero footer row */
-.hero-footer { display: none; }
-
-/* ── MARQUEE ── */
-.mq-section { position: relative; z-index: 2; border-bottom: none; }
-
-/* ── WORK INTRO ── */
-#work-intro {
-  position: relative; z-index: 2;
-  display: grid; grid-template-columns: 1fr 1fr;
-}
-.wi-block {
-  padding: 88px 56px;
-  border-top: 1px solid var(--line);
-  opacity: 0; transform: translateY(28px);
-}
-.wi-block.in {
-  opacity: 1; transform: translateY(0);
-  transition: opacity .85s cubic-bezier(.22,1,.36,1), transform .85s cubic-bezier(.22,1,.36,1);
-}
-.wi-block:first-child { border-right: 1px solid var(--line); }
-.wi-block-label {
-  font-size: 9px; font-weight: 500;
-  letter-spacing: .2em; text-transform: uppercase;
-  color: var(--orange); margin-bottom: 20px;
-}
-.wi-block-title {
-  font-family: var(--serif);
-  font-weight: 300; font-size: clamp(28px, 3vw, 42px);
-  line-height: 1.1; letter-spacing: -.02em;
-  margin-bottom: 20px; color: var(--fg);
-  transition: color .35s ease;
-}
-.wi-block:hover .wi-block-title { color: var(--orange); }
-.wi-block-desc {
-  font-size: 14px; font-weight: 300;
-  line-height: 1.82; color: var(--gray-a); max-width: 420px;
-}
-.wi-block-period {
-  margin-top: 28px;
-  font-size: 10px; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--gray-b);
-}
-
-/* ── EXPLORE BLOCKS ── */
-#explore {
-  position: relative; z-index: 2;
-  border-top: 1px solid var(--line);
-}
-.explore-label {
-  padding: 56px 56px 0;
-  opacity: 0; transform: translateY(16px);
-}
-.explore-label.in {
-  opacity: 1; transform: translateY(0);
-  transition: opacity .7s ease, transform .7s ease;
-}
-.explore-label span {
-  font-size: 10px; font-weight: 500;
-  letter-spacing: .22em; text-transform: uppercase; color: var(--orange);
-}
-.explore-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  margin-top: 36px;
-}
-.ex-block {
-  display: flex; flex-direction: column; justify-content: space-between;
-  padding: 72px 56px 64px;
-  min-height: 360px;
-  border-top: 1px solid var(--line);
-  color: var(--fg);
-  position: relative; overflow: hidden;
-  opacity: 0; transform: translateY(32px);
-  transition: color .3s;
-}
-.ex-block.in {
-  opacity: 1; transform: translateY(0);
-  transition: opacity .85s cubic-bezier(.22,1,.36,1), transform .85s cubic-bezier(.22,1,.36,1), color .3s;
-}
-.ex-block:nth-child(odd) { border-right: 1px solid var(--line); }
-
-.ex-block::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: rgba(212,96,0,.05);
-  transform: scaleY(0); transform-origin: bottom;
-  transition: transform .5s cubic-bezier(.22,1,.36,1);
-}
-.ex-block:hover::before { transform: scaleY(1); }
-
-.ex-num {
-  font-size: 11px; font-weight: 500;
-  letter-spacing: .12em; color: var(--orange);
-  transition: letter-spacing .4s ease; position: relative; z-index: 1;
-}
-.ex-block:hover .ex-num { letter-spacing: .22em; }
-
-.ex-mid {
-  flex: 1; display: flex; flex-direction: column;
-  justify-content: center; padding: 44px 0;
-  position: relative; z-index: 1;
-}
-.ex-title {
-  font-family: var(--serif);
-  font-size: clamp(44px, 5.5vw, 76px);
-  font-weight: 300; font-style: italic;
-  line-height: .9; letter-spacing: -.03em;
-  transition: transform .45s cubic-bezier(.22,1,.36,1), color .35s ease;
-}
-.ex-block:hover .ex-title { transform: translateX(10px); color: var(--orange); }
-
-.ex-sub {
-  font-size: 10px; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--gray-b);
-  margin-top: 16px; transition: color .3s;
-}
-.ex-block:hover .ex-sub { color: var(--gray-a); }
-
-.ex-arrow {
-  font-size: 22px; color: var(--gray-b);
-  transition: transform .35s ease, color .3s;
-  position: relative; z-index: 1; align-self: flex-end;
-}
-.ex-block:hover .ex-arrow { transform: translate(5px,-5px); color: var(--orange); }
-
-/* ── HOME CTA ── */
-.home-cta {
-  position: relative; z-index: 2;
-  padding: 100px 56px 104px;
-  border-top: 1px solid var(--line);
-  text-align: center;
-  opacity: 0; transform: translateY(32px);
-}
-.home-cta.in {
-  opacity: 1; transform: translateY(0);
-  transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1);
-}
-.hcta-title {
-  font-family: var(--serif);
-  font-weight: 300; font-style: italic;
-  font-size: clamp(36px, 5vw, 72px);
-  line-height: 1; letter-spacing: -.02em; margin-bottom: 20px;
-  transition: color .35s ease;
-}
-.home-cta:hover .hcta-title { color: var(--orange); }
-.hcta-sub {
-  font-size: 14px; font-weight: 300;
-  color: var(--gray-a); line-height: 1.75;
-  white-space: nowrap; margin: 0 auto;
-}
-
-/* ── RESPONSIVE ── */
-@media (max-width: 900px) {
-  #work-intro { grid-template-columns: 1fr; }
-  .wi-block:first-child { border-right: none; }
-  .explore-grid { grid-template-columns: 1fr; }
-  .ex-block:nth-child(odd) { border-right: none; }
-  .ex-block { min-height: 240px; padding: 56px 24px 48px; }
-  .home-cta { grid-template-columns: 1fr; gap: 48px; }
-}
-@media (max-width: 768px) {
-  #hero { padding: 72px 24px 64px; }
-  .hero-roles { grid-template-columns: 1fr; gap: 20px; }
-  .wi-block { padding: 64px 24px; }
-  .explore-label { padding: 44px 24px 0; }
-  .home-cta { padding: 72px 24px 80px; }
-}
-</style>
 </head>
 <body>
 
-<div class="orb-wrap">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-</div>
-<div class="noise"></div>
-
-<nav class="site-nav">
-  <a href="index.html" class="nav-logo">Han Cao</a>
-  <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-  <ul class="nav-list">
-    <li><a href="work.html">Work</a></li>
-    <li><a href="projects.html">Patents</a></li>
-    <li><a href="gallery.html">Skills</a></li>
-    <li><a href="about.html">About me</a></li>
-    <li class="contact-li">
-      <div class="contact-pill">
-        <div class="cp-spacer" aria-hidden="true">hanmail1024@gmail.com &nbsp;⊕</div>
-        <span class="cp-front">Contact</span>
-        <span class="cp-back">
-          <span>hanmail1024@gmail.com</span>
-          <button class="cp-copy" title="Copy email">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-          </button>
-        </span>
+<!-- ── NAV (frosted glass + flip contact) ── -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-logo" aria-label="Han Cao — home"><img src="images/logo.png" alt="Han Cao"></a>
+    <ul class="nav-links">
+      <li><a href="work.html">Work</a></li>
+      <li><a href="projects.html">Patents</a></li>
+      <li><a href="gallery.html">Skills</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div class="contact-li" id="contact-li">
+        <div class="contact-pill" role="button" tabindex="0" aria-label="Contact — click to reveal email">
+          <span class="cp-front">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <span>Contact</span>
+          </span>
+          <span class="cp-back">
+            <span>hanmail1024@gmail.com</span>
+            <button class="cp-copy" title="Copy email" aria-label="Copy email to clipboard">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+          </span>
+        </div>
       </div>
-    </li>
-  </ul>
+      <button class="nav-mobile-toggle" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
 </nav>
-<script src="nav.js"></script>
 
 <!-- ── HERO ── -->
-<section id="hero">
-  <div class="hero-grad-flow"></div>
-  <div class="hero-grad-cursor" id="hero-grad-cursor"></div>
-  <div class="hero-noise"></div>
-
-  <!-- Structural grid overlay -->
-  <div class="hero-grid" aria-hidden="true">
-    <!-- 3 vertical dividers → 4 columns -->
-    <div class="hg-v" style="left:25%"></div>
-    <div class="hg-v" style="left:50%"></div>
-    <div class="hg-v" style="left:75%"></div>
-    <!-- Horizontal divider between name and roles -->
-    <div class="hg-h" style="top:72%"></div>
-    <!-- Dots: top edge × column lines -->
-    <div class="hg-dot" style="top:0;left:25%"></div>
-    <div class="hg-dot" style="top:0;left:50%"></div>
-    <div class="hg-dot" style="top:0;left:75%"></div>
-    <!-- Dots: horizontal row × all intersections -->
-    <div class="hg-dot" style="top:72%;left:0%"></div>
-    <div class="hg-dot" style="top:72%;left:25%"></div>
-    <div class="hg-dot" style="top:72%;left:50%"></div>
-    <div class="hg-dot" style="top:72%;left:75%"></div>
-    <div class="hg-dot" style="top:72%;left:100%"></div>
-    <!-- Dots: bottom edge × column lines -->
-    <div class="hg-dot" style="top:100%;left:25%"></div>
-    <div class="hg-dot" style="top:100%;left:50%"></div>
-    <div class="hg-dot" style="top:100%;left:75%"></div>
-  </div>
-
-  <!-- Open to Work badge -->
-  <div class="open-badge">
-    <span class="badge-dot"></span>
-    Open to Work
-  </div>
-
-  <!-- Name + roles -->
-  <div class="hero-main">
-    <div id="hero-name">
-      <span class="name-line"><span class="name-inner">Han</span></span>
-      <span class="name-line"><span class="name-inner">Cao</span></span>
+<section class="hero" id="top">
+  <img class="hero-decor" src="images/decor1.png" alt="" aria-hidden="true">
+  <div class="hero-inner">
+    <span class="eyebrow">Software Development Engineer · Amazon Web Services</span>
+    <h1>
+      Scalable services.<br>
+      Generative AI. <em>Infrastructure</em>.
+    </h1>
+    <p class="hero-sub">
+      Three-plus years at AWS — Amazon Lex and Lambda. Features owned end-to-end, design through multi-region launch. Built for reliability and operational efficiency.
+    </p>
+    <div class="hero-cta">
+      <a href="#work" class="btn btn-primary">View work</a>
+      <a href="#highlights" class="btn btn-secondary">Highlights</a>
     </div>
-    <div class="hero-line"></div>
-    <div class="hero-roles">
-      <div>
-        <div class="hero-role-co">Amazon Lex</div>
-        <div class="hero-role-title">Software Development Engineer</div>
-        <div class="hero-role-period">Jun 2024 — Present</div>
-      </div>
-      <div>
-        <div class="hero-role-co">AWS Lambda</div>
-        <div class="hero-role-title">Software Development Engineer</div>
-        <div class="hero-role-period">Aug 2022 — Jun 2024</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="hero-footer">
-    <div class="scroll-cue">
-      <span class="scroll-cue-label">Scroll</span>
-      <div class="scroll-cue-line"></div>
+    <div style="margin-top:32px;">
+      <span class="pill">
+        <span class="pill-dot"></span>
+        Open for senior &amp; staff engineering roles
+      </span>
     </div>
   </div>
 </section>
 
-<!-- ── MARQUEE — Lex & Lambda only ── -->
-<div class="mq-section" id="mq-strip">
-  <div class="mq-row">
-    <div class="mq-track" id="mq1">
-      <span class="mq-item">
-        <span class="mq-accent">Amazon Lex</span>
-        <span class="mq-dot"></span>
-        Conversational AI Platform
-        <span class="mq-dot"></span>
-        Generative AI Features
-        <span class="mq-dot"></span>
-        Bot Analyzer
-        <span class="mq-dot"></span>
-        11 AWS Regions
-        <span class="mq-dot"></span>
-        Multi-Modal Dialogue
-        <span class="mq-dot"></span>
-      </span>
+<!-- ── WORK INTRO — dual-column ── -->
+<section id="work">
+  <div id="work-intro">
+    <div class="wi-block">
+      <img class="wi-decor" src="images/decor2.png" alt="" aria-hidden="true">
+      <div class="wi-block-label">Amazon Lex · Jun 2024 — Present</div>
+      <div class="wi-block-title">Shipped AI<br>at AWS Scale</div>
+      <p class="wi-block-desc">
+        Built Bot Analyzer — an LLM-powered configuration analysis feature on Amazon Bedrock and Step Functions, live across eleven AWS regions. Benchmarked twelve LLMs for accuracy, latency, and cost. Also designed Multi-modal Conversation for SMS capture during live voice calls.
+      </p>
+      <div class="wi-block-period">Generative AI · Amazon Bedrock · Java · Python</div>
     </div>
-  </div>
-  <div class="mq-row">
-    <div class="mq-track" id="mq2">
-      <span class="mq-item">
-        <span class="mq-accent">AWS Lambda</span>
-        <span class="mq-dot"></span>
-        Serverless Compute Platform
-        <span class="mq-dot"></span>
-        Region Build Automation
-        <span class="mq-dot"></span>
-        Control Plane Throttling
-        <span class="mq-dot"></span>
-        EventBridge Orchestration
-        <span class="mq-dot"></span>
-      </span>
+    <div class="wi-block">
+      <div class="wi-block-label">AWS Lambda · Aug 2022 — Jun 2024</div>
+      <div class="wi-block-title">Infrastructure<br>at Zero Tolerance</div>
+      <p class="wi-block-desc">
+        Led region build automation cutting cycle time from fourteen to five days. Co-designed a multi-dimensional token-bucket throttling system — load-tested at 7× peak production traffic — protecting millions of Lambda users from cross-tenant spikes.
+      </p>
+      <div class="wi-block-period">Distributed Systems · Reliability · Java · CloudFormation</div>
     </div>
-  </div>
-</div>
-
-<!-- ── WORK INTRO ── -->
-<section id="work-intro">
-  <div class="wi-block" id="wi-1">
-    <div class="wi-block-label">Amazon Lex &nbsp;·&nbsp; Jun 2024 — Present</div>
-    <div class="wi-block-title">Conversational AI<br>at AWS Scale</div>
-    <p class="wi-block-desc">
-      Shipped Bot Analyzer — an LLM-powered configuration analysis feature built on Amazon Bedrock and Step Functions, publicly available across 11 AWS regions. Also designed Multi-modal Conversation for seamless SMS capture during live voice calls.
-    </p>
-    <div class="wi-block-period">Generative AI &nbsp;·&nbsp; Distributed Systems &nbsp;·&nbsp; Java &nbsp;·&nbsp; Python</div>
-  </div>
-  <div class="wi-block" id="wi-2">
-    <div class="wi-block-label">AWS Lambda &nbsp;·&nbsp; Aug 2022 — Jun 2024</div>
-    <div class="wi-block-title">Infrastructure That<br>Never Goes Down</div>
-    <p class="wi-block-desc">
-      Led automation of Lambda EventBridge control plane region builds — replacing a fully manual process — reducing build time from 14 to 5 days. Co-designed the multi-dimensional token bucket throttle system protecting millions of Lambda users.
-    </p>
-    <div class="wi-block-period">Infrastructure &nbsp;·&nbsp; Reliability &nbsp;·&nbsp; Java &nbsp;·&nbsp; CloudFormation</div>
   </div>
 </section>
 
-<!-- ── EXPLORE ── -->
-<section id="explore">
-  <div class="explore-label" id="explore-label">
-    <span>Explore</span>
+<!-- ── MANIFESTO — asymmetric Klein Blue moment ── -->
+<section class="manifesto" aria-label="Manifesto">
+  <div class="manifesto-block">
+    <div class="manifesto-block-mark">Ed. 01 / 2026</div>
+    <div class="manifesto-block-num">'26</div>
+    <div class="manifesto-block-foot">Seattle / PST</div>
   </div>
+  <div class="manifesto-text">
+    <img class="manifesto-decor" src="images/decor3.png" alt="" aria-hidden="true">
+    <p class="manifesto-quote">
+      "I ship the thing.<br>
+      Measure the thing.<br>
+      <span class="klein">Improve</span> the thing."
+    </p>
+    <p class="manifesto-attr">— operating principle</p>
+  </div>
+</section>
+
+<!-- ── HIGHLIGHTS — brief intro of what I built ── -->
+<section class="highlights" id="highlights">
+  <div class="highlights-head">
+    <span class="highlights-eyebrow">// what I built</span>
+    <h2 class="highlights-title">Four production features, two AWS teams.</h2>
+  </div>
+  <div class="hl-list">
+    <div class="hl-row">
+      <span class="hl-num">01</span>
+      <div class="hl-body">
+        <div class="hl-name">Bot Analyzer</div>
+        <p class="hl-desc">LLM-driven configuration analysis for Amazon Lex chatbots, surfacing alignment with AWS best practices through public API and the Lex console. End-to-end across 11 regions; 12 LLMs benchmarked for accuracy, latency, and cost.</p>
+      </div>
+      <span class="hl-team">amazon-lex · 2024 — <span class="hl-status">GA</span></span>
+    </div>
+    <div class="hl-row">
+      <span class="hl-num">02</span>
+      <div class="hl-body">
+        <div class="hl-name">Multi-modal Conversation</div>
+        <p class="hl-desc">SMS input capture during live IVR voice calls without interrupting the session. Extended bot channel APIs to integrate End User Messaging with Amazon Connect. Delivered as a private beta across four enterprise teams.</p>
+      </div>
+      <span class="hl-team">amazon-lex · 2024 — <span class="hl-status">Private Beta</span></span>
+    </div>
+    <div class="hl-row">
+      <span class="hl-num">03</span>
+      <div class="hl-body">
+        <div class="hl-name">Region Build Automation</div>
+        <p class="hl-desc">Led automation of Lambda's EventBridge control-plane region builds — replacing a fully manual sequence with an orchestrated CI/CD pipeline. Cycle time from 14 days to 5; zero manual steps and zero errors.</p>
+      </div>
+      <span class="hl-team">aws-lambda · 2023 — <span class="hl-status">2.8× speedup</span></span>
+    </div>
+    <div class="hl-row">
+      <span class="hl-num">04</span>
+      <div class="hl-body">
+        <div class="hl-name">Control-Plane Throttling</div>
+        <p class="hl-desc">Co-designed a multi-dimensional token-bucket throttling system protecting the Lambda fleet from cross-tenant traffic spikes. Per-host local cache; async sync to data plane. Load-tested at 7× normal traffic; p99 overhead under 25&nbsp;ms.</p>
+      </div>
+      <span class="hl-team">aws-lambda · 2023 — <span class="hl-status">Shipped</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPLORE GRID — entry points ── -->
+<section class="explore" id="explore">
+  <div class="explore-label">Explore</div>
   <div class="explore-grid">
-    <a href="work.html" class="ex-block" id="ex-1">
+    <a href="work.html" class="ex-block">
       <span class="ex-num">01</span>
       <span class="ex-mid">
         <span class="ex-title">Work</span>
-        <span class="ex-sub">Amazon Lex &nbsp;·&nbsp; AWS Lambda</span>
+        <span class="ex-sub">Amazon Lex · AWS Lambda</span>
       </span>
       <span class="ex-arrow">↗</span>
     </a>
-    <a href="projects.html" class="ex-block" id="ex-2">
+    <a href="projects.html" class="ex-block klein">
       <span class="ex-num">02</span>
       <span class="ex-mid">
         <span class="ex-title">Patents</span>
@@ -591,7 +173,7 @@ body.visible .hero-roles { opacity: 1; transform: translateY(0); }
       </span>
       <span class="ex-arrow">↗</span>
     </a>
-    <a href="gallery.html" class="ex-block" id="ex-3">
+    <a href="gallery.html" class="ex-block">
       <span class="ex-num">03</span>
       <span class="ex-mid">
         <span class="ex-title">Skills</span>
@@ -599,7 +181,7 @@ body.visible .hero-roles { opacity: 1; transform: translateY(0); }
       </span>
       <span class="ex-arrow">↗</span>
     </a>
-    <a href="about.html" class="ex-block" id="ex-4">
+    <a href="about.html" class="ex-block">
       <span class="ex-num">04</span>
       <span class="ex-mid">
         <span class="ex-title">About me</span>
@@ -610,150 +192,132 @@ body.visible .hero-roles { opacity: 1; transform: translateY(0); }
   </div>
 </section>
 
-<!-- ── LET'S BUILD SOMETHING ── -->
-<div class="home-cta" id="home-cta">
-  <h2 class="hcta-title">Let's build<br>something.</h2>
-  <p class="hcta-sub">Open to senior SDE roles, staff engineering, and ambitious technical challenges.</p>
-</div>
+<!-- ── CTA — editorial closing spread ── -->
+<section class="section cta-klein" id="contact-cta">
+  <div class="cta-inner">
+    <div class="cta-top">
+      <span class="cta-eyebrow">— Closing remarks</span>
+      <span class="cta-edition">Ed. 01 / 2026 · Seattle</span>
+    </div>
+
+    <div class="cta-headline-row">
+      <h2 class="cta-headline">
+        Let's ship<br>
+        something <em>real</em>.
+      </h2>
+      <span class="cta-status">
+        <span class="cta-status-dot"></span>
+        Open for Senior &amp; Staff roles
+      </span>
+    </div>
+
+    <hr class="cta-rule">
+
+    <dl class="cta-meta">
+      <div class="cta-meta-row">
+        <dt>Role</dt>
+        <dd>Senior / Staff SDE · AI infrastructure</dd>
+      </div>
+      <div class="cta-meta-row">
+        <dt>Located</dt>
+        <dd>Seattle, WA · Pacific Time</dd>
+      </div>
+      <div class="cta-meta-row cta-meta-link">
+        <dt>Email</dt>
+        <dd><a href="mailto:hanmail1024@gmail.com">hanmail1024@gmail.com<span class="cta-arrow">↗</span></a></dd>
+      </div>
+      <div class="cta-meta-row cta-meta-link">
+        <dt>LinkedIn</dt>
+        <dd><a href="https://linkedin.com/in/han-ca0" target="_blank" rel="noopener">linkedin.com/in/han-ca0<span class="cta-arrow">↗</span></a></dd>
+      </div>
+    </dl>
+
+    <p class="cta-sign">— Han Cao</p>
+  </div>
+</section>
 
 <!-- ── FOOTER ── -->
-<footer class="site-footer">
-  <div class="footer-left">
-    <a href="index.html" class="footer-name">Han<br>Cao</a>
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <a href="#top" class="footer-name footer-name--logo" aria-label="Han Cao — back to top">
+        <img src="images/logo.png" alt="Han Cao" class="footer-logo">
+      </a>
+      <p class="footer-tag">Software engineer · Amazon Web Services · Seattle, Washington.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Inside</h4>
+      <ul>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#highlights">Highlights</a></li>
+        <li><a href="#explore">More</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:hanmail1024@gmail.com">hanmail1024@gmail.com</a></li>
+        <li><a href="https://linkedin.com/in/han-ca0" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+    </div>
   </div>
-  <div class="footer-right">
-    <div class="footer-contact-row">
-      <span class="fcr-label">Email</span>
-      <a href="mailto:hanmail1024@gmail.com" class="fcr-val">hanmail1024@gmail.com</a>
-    </div>
-    <div class="footer-contact-row">
-      <span class="fcr-label">LinkedIn</span>
-      <a href="https://linkedin.com/in/han-ca0" class="fcr-val">han-ca0</a>
-    </div>
+  <div class="footer-bottom">
+    <span>© 2026 Han Cao</span>
+    <span>Built by hand · Seattle · PST</span>
   </div>
 </footer>
 
 <script>
-gsap.registerPlugin(ScrollTrigger);
-const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+(function() {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ── Page load ── */
-window.addEventListener('load', () => {
-  setTimeout(() => document.body.classList.add('visible'), 100);
-});
-
-/* ── Hero parallax ── */
-if (!reduced) {
-  gsap.to('#hero-name', {
-    yPercent: -12, ease: 'none',
-    scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true }
-  });
-  gsap.to('.orb-1', {
-    y: -80, ease: 'none',
-    scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom top', scrub: true }
-  });
-}
-
-/* ── Hero cursor-tracking gradient ── */
-const heroCursorGrad = document.getElementById('hero-grad-cursor');
-if (heroCursorGrad && !reduced) {
-  const heroEl = document.getElementById('hero');
-  let tX = 50, tY = 50, cX = 50, cY = 50, raf = null;
-
-  function animateHeroGrad() {
-    cX += (tX - cX) * 0.07;
-    cY += (tY - cY) * 0.07;
-    heroCursorGrad.style.setProperty('--gx', cX.toFixed(2) + '%');
-    heroCursorGrad.style.setProperty('--gy', cY.toFixed(2) + '%');
-    if (Math.abs(tX - cX) > 0.05 || Math.abs(tY - cY) > 0.05) {
-      raf = requestAnimationFrame(animateHeroGrad);
-    } else { raf = null; }
+  /* ── REVEAL ── */
+  if (!reduced) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal, .wi-block, .hl-row, .ex-block').forEach(el => {
+      el.classList.add('reveal');
+      io.observe(el);
+    });
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
   }
 
-  heroEl.addEventListener('mousemove', e => {
-    const r = heroEl.getBoundingClientRect();
-    tX = ((e.clientX - r.left) / r.width) * 100;
-    tY = ((e.clientY - r.top) / r.height) * 100;
-    heroCursorGrad.classList.add('active');
-    if (!raf) raf = requestAnimationFrame(animateHeroGrad);
-  });
-
-  heroEl.addEventListener('mouseleave', () => {
-    heroCursorGrad.classList.remove('active');
-  });
-}
-
-/* ── Dual marquee ── */
-function setupMarquee(id, opts) {
-  const track = document.getElementById(id);
-  if (!track || track.dataset.cloned) return;
-  track.innerHTML += track.innerHTML;
-  track.dataset.cloned = 'true';
-  if (reduced) return;
-  const hw = () => track.scrollWidth / 2;
-  const tw = gsap.fromTo(track,
-    { x: opts.rev ? () => -hw() : 0 },
-    { x: opts.rev ? 0 : () => -hw(), ease: 'none', duration: opts.dur, repeat: -1 }
-  );
-  const row = track.closest('.mq-row');
-  if (row) {
-    row.addEventListener('mouseenter', () => tw.pause());
-    row.addEventListener('mouseleave', () => tw.resume());
-  }
-}
-setupMarquee('mq1', { dur: 55, rev: false });
-setupMarquee('mq2', { dur: 68, rev: true });
-
-/* ── Scroll reveals ── */
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-  });
-}, { threshold: .12 });
-
-['#wi-1', '#wi-2', '#explore-label', '#home-cta'].forEach(sel => {
-  const el = document.querySelector(sel);
-  if (!el) return;
-  reduced ? el.classList.add('in') : io.observe(el);
-});
-
-const blocks = document.querySelectorAll('.ex-block');
-if (reduced) {
-  blocks.forEach(b => b.classList.add('in'));
-} else {
-  const bio = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) {
-      blocks.forEach((b, i) => setTimeout(() => b.classList.add('in'), i * 120));
-      bio.disconnect();
-    }
-  }, { threshold: .08 });
-  if (blocks.length) bio.observe(blocks[0]);
-}
-
-/* ── Contact copy button ── */
-document.querySelectorAll('.cp-copy').forEach(btn => {
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
-    navigator.clipboard.writeText('hanmail1024@gmail.com').then(() => {
-      const prev = btn.innerHTML;
-      btn.innerHTML = '✓';
-      btn.classList.add('copied');
-      setTimeout(() => { btn.innerHTML = prev; btn.classList.remove('copied'); }, 2000);
+  /* ── SMOOTH SCROLL WITH NAV OFFSET ── */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (!el) return;
+      e.preventDefault();
+      const y = el.getBoundingClientRect().top + window.scrollY - 52;
+      window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
     });
   });
-});
 
-/* ── Page transition ── */
-document.querySelectorAll('a[href$=".html"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const href = a.getAttribute('href');
-    if (href === window.location.pathname.split('/').pop()) return;
-    e.preventDefault();
-    document.body.style.transition = 'opacity .38s ease';
-    document.body.style.opacity = '0';
-    setTimeout(() => window.location.href = href, 400);
-  });
-});
+  /* ── ACTIVE NAV LINK ── */
+  const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+  const sections = ['work', 'highlights', 'explore'].map(id => document.getElementById(id)).filter(Boolean);
+  function updateActive() {
+    const y = window.scrollY + 80;
+    let active = null;
+    sections.forEach(s => { if (s.offsetTop <= y) active = s.id; });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + active);
+    });
+  }
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+
+})();
 </script>
+<script src="nav.js"></script>
 </body>
 </html>

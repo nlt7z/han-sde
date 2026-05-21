@@ -4,458 +4,242 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patents — Han Cao</title>
+<link rel="icon" type="image/png" href="images/logo.png">
+<link rel="apple-touch-icon" href="images/logo.png">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-<style>
-body { padding-top: 72px; }
-
-/* ── PAGE HEADER ── */
-.page-header {
-  padding: 56px 56px 72px;
-}
-.page-eyebrow {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--orange);
-  margin-bottom: 16px;
-}
-.page-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-/* ── ENTRY ROWS ──
-   Each entry slides up from translateY(64px) → 0
-   and fades in, one after another as you scroll.
-   This creates the "stacking one by one" feel.
-*/
-.entries { padding: 0 56px; }
-
-.entry-group {
-  border-top: 1px solid var(--line-hi);
-  padding-top: 0;
-}
-
-.group-label {
-  padding: 40px 0 0;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 0;
-}
-.group-label-text {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--gray-b);
-  white-space: nowrap;
-}
-.group-label-line {
-  display: none;
-}
-
-/* Single entry */
-.entry {
-  display: grid;
-  grid-template-columns: 52px 1fr 240px;
-  gap: 0 44px;
-  padding: 48px 0;
-  border-bottom: 1px solid var(--line);
-  opacity: 0;
-  transform: translateY(60px);
-  will-change: transform, opacity;
-}
-
-.entry-idx {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .1em;
-  color: var(--orange);
-  padding-top: 5px;
-}
-.entry-body {}
-.entry-type {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--gray-b);
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.entry-type::before {
-  content: '';
-  display: block;
-  width: 12px; height: 1px;
-  background: var(--gray-b);
-}
-.entry-title {
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(22px, 2.5vw, 32px);
-  line-height: 1.1;
-  letter-spacing: -.01em;
-  margin-bottom: 18px;
-  color: var(--fg);
-}
-.entry-desc {
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 1.82;
-  color: var(--gray-a);
-  max-width: 520px;
-}
-.entry-ref {
-  margin-top: 18px;
-  font-size: 12px;
-  font-style: italic;
-  color: var(--gray-b);
-  letter-spacing: .02em;
-}
-
-.entry-aside {
-  padding-top: 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.aside-block {}
-.aside-label {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--gray-b);
-  margin-bottom: 5px;
-}
-.aside-value {
-  font-size: 13px;
-  font-weight: 300;
-  color: var(--gray-a);
-  line-height: 1.5;
-}
-.aside-value.hi { color: var(--fg); }
-
-/* ── TOOL GRID ── */
-.tools-section {
-  padding: 80px 56px;
-}
-.tools-section-label {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--gray-b);
-  margin-bottom: 40px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-.tools-section-label::after {
-  content: none;
-}
-
-.tools-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-top: 1px solid var(--line-hi);
-}
-
-.tool-cell {
-  padding: 40px 0;
-  border-bottom: 1px solid var(--line);
-  opacity: 0;
-  transform: translateY(44px);
-  will-change: transform, opacity;
-}
-.tool-cell:nth-child(odd) {
-  padding-right: 56px;
-  border-right: 1px solid var(--line);
-}
-.tool-cell:nth-child(even) {
-  padding-left: 56px;
-}
-
-.tool-num {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .1em;
-  color: var(--orange);
-  margin-bottom: 14px;
-}
-.tool-name {
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(20px, 2vw, 28px);
-  line-height: 1.15;
-  letter-spacing: -.01em;
-  margin-bottom: 14px;
-  color: var(--fg);
-}
-.tool-desc {
-  font-size: 13px;
-  font-weight: 300;
-  line-height: 1.78;
-  color: var(--gray-a);
-}
-.tool-meta {
-  margin-top: 14px;
-  font-size: 11px;
-  letter-spacing: .08em;
-  color: var(--gray-b);
-}
-
-@media (max-width: 900px) {
-  .entry { grid-template-columns: 32px 1fr; }
-  .entry-aside { display: none; }
-  .tools-grid { grid-template-columns: 1fr; }
-  .tool-cell:nth-child(odd) { padding-right: 0; border-right: none; }
-  .tool-cell:nth-child(even) { padding-left: 0; }
-}
-@media (max-width: 768px) {
-  .page-header { padding: 40px 24px 56px; }
-  .entries { padding: 0 24px; }
-  .tools-section { padding: 60px 24px; }
-}
-</style>
 </head>
 <body>
 
-<nav class="site-nav">
-  <a href="index.html" class="nav-logo">Han Cao</a>
-  <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-  <ul class="nav-list">
-    <li><a href="work.html">Work</a></li>
-    <li><a href="projects.html" class="active">Patents</a></li>
-    <li><a href="gallery.html">Skills</a></li>
-    <li><a href="about.html">About</a></li>
-    <li class="contact-li">
-      <div class="contact-pill">
-        <div class="cp-spacer" aria-hidden="true">hanmail1024@gmail.com &nbsp;<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></div>
-        <span class="cp-front">Contact</span>
-        <span class="cp-back">
-          <span>hanmail1024@gmail.com</span>
-          <button class="cp-copy" title="Copy email">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-          </button>
-        </span>
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="Han Cao — home"><img src="images/logo.png" alt="Han Cao"></a>
+    <ul class="nav-links">
+      <li><a href="work.html">Work</a></li>
+      <li><a href="projects.html" class="active">Patents</a></li>
+      <li><a href="gallery.html">Skills</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div class="contact-li">
+        <div class="contact-pill" role="button" tabindex="0" aria-label="Contact — click to reveal email">
+          <span class="cp-front">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <span>Contact</span>
+          </span>
+          <span class="cp-back">
+            <span>hanmail1024@gmail.com</span>
+            <button class="cp-copy" title="Copy email" aria-label="Copy email to clipboard">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+          </span>
+        </div>
       </div>
-    </li>
-  </ul>
+      <button class="nav-mobile-toggle" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
 </nav>
 <script src="nav.js"></script>
 
-<!-- PAGE HEADER -->
-<header class="page-header" id="page-header">
-  <p class="page-eyebrow">Research &amp; Intellectual Property</p>
-  <div class="page-header-row">
-    <h1 class="t-title">Patents &amp;<br>Publications</h1>
-    <span class="t-label">Independent work</span>
-  </div>
-</header>
-
-<!-- RESEARCH ENTRIES -->
-<section class="entries">
-
-  <div class="entry-group">
-    <div class="group-label">
-      <span class="group-label-text">Publications &amp; Patents</span>
-      <div class="group-label-line"></div>
-    </div>
-
-    <!-- Entry 01 -->
-    <div class="entry" id="e1">
-      <span class="entry-idx">01</span>
-      <div class="entry-body">
-        <p class="entry-type">Academic Publication</p>
-        <h2 class="entry-title">Learning-based Software<br>Defect Prediction</h2>
-        <p class="entry-desc">
-          A systematic study evaluating machine learning approaches for predicting
-          software defects in production codebases. Explored feature extraction from
-          abstract syntax trees, code metrics, and change history. Evaluated
-          classification models across multiple open-source Java projects.
-        </p>
-        <p class="entry-ref">Han Cao — Journal of Physics, Conference Series · CCEAI 2020</p>
-      </div>
-      <div class="entry-aside">
-        <div class="aside-block">
-          <div class="aside-label">Venue</div>
-          <div class="aside-value">CCEAI 2020</div>
-        </div>
-        <div class="aside-block">
-          <div class="aside-label">Published in</div>
-          <div class="aside-value">Journal of Physics</div>
-        </div>
-        <div class="aside-block">
-          <div class="aside-label">Year</div>
-          <div class="aside-value hi">2020</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Entry 02 -->
-    <div class="entry" id="e2">
-      <span class="entry-idx">02</span>
-      <div class="entry-body">
-        <p class="entry-type">Utility Patent — Granted</p>
-        <h2 class="entry-title">TCM Self-Service Clinic<br>Management System</h2>
-        <p class="entry-desc">
-          Invented a self-service inquiry management system for Traditional Chinese Medicine
-          outpatient clinics, streamlining patient intake and pre-consultation workflows.
-          Enables patients to complete structured symptom entry and consultation routing
-          without front-desk intervention.
-        </p>
-        <p class="entry-ref">Grant No. ZL 2017 2 1856637.6 — Patent Authority of China</p>
-      </div>
-      <div class="entry-aside">
-        <div class="aside-block">
-          <div class="aside-label">Status</div>
-          <div class="aside-value hi">Granted</div>
-        </div>
-        <div class="aside-block">
-          <div class="aside-label">Patent No.</div>
-          <div class="aside-value">ZL 2017 2 1856637.6</div>
-        </div>
-        <div class="aside-block">
-          <div class="aside-label">Year</div>
-          <div class="aside-value">2017</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</section>
-
-<!-- INTERNAL TOOLING -->
-<section class="tools-section">
-  <div class="tools-section-label">Internal Tooling</div>
-  <div class="tools-grid">
-
-    <div class="tool-cell" id="t1">
-      <div class="tool-num">03</div>
-      <div class="tool-name">LLM Evaluation Framework</div>
-      <p class="tool-desc">Internal benchmark suite for evaluating 12 large language models across accuracy, latency, and cost for production model selection at Amazon Lex.</p>
-      <p class="tool-meta">Amazon Lex · 2024</p>
-    </div>
-
-    <div class="tool-cell" id="t2">
-      <div class="tool-num">04</div>
-      <div class="tool-name">Region Build Orchestration</div>
-      <p class="tool-desc">New orchestration model replacing the manual Lambda region expansion process. Parallelised IA-gating tasks and integrated with automated region config systems.</p>
-      <p class="tool-meta">AWS Lambda · 2023</p>
-    </div>
-
-    <div class="tool-cell" id="t3">
-      <div class="tool-num">05</div>
-      <div class="tool-name">Load Testing Suite</div>
-      <p class="tool-desc">Designed and executed load testing simulating ~7× normal production traffic across 50,000 throttle cache keys to validate Lambda control plane latency impact.</p>
-      <p class="tool-meta">AWS Lambda · 2023</p>
-    </div>
-
-    <div class="tool-cell" id="t4">
-      <div class="tool-num">06</div>
-      <div class="tool-name">MapReduce Analysis Pipeline</div>
-      <p class="tool-desc">Custom MapReduce pipeline that shards Amazon Lex bots by intent for parallel processing and result aggregation, achieving sub-60-second analysis for bots with 1,000+ intents.</p>
-      <p class="tool-meta">Amazon Lex · 2024</p>
-    </div>
-
+<!-- ── PAGE HEAD ── -->
+<section class="page-head">
+  <img class="page-head-decor" src="images/decor3.png" alt="" aria-hidden="true">
+  <div class="page-head-inner">
+    <span class="page-head-eyebrow">// research &amp; intellectual property</span>
+    <h1 class="page-title">Patents and<br><em>publications</em>.</h1>
+    <p class="page-head-sub">Independent academic work, one granted utility patent, and a stack of internal AWS tooling.</p>
   </div>
 </section>
 
-<footer class="site-footer">
-  <div class="footer-left">
-    <a href="index.html" class="footer-name">Han Cao</a>
+<!-- ── PATENTS / PUBLICATIONS ── -->
+<section class="section">
+  <div class="section-inner" style="max-width:1080px;">
+    <span class="section-eyebrow">// publications &amp; patents</span>
+    <h2 class="section-title">Filed and granted.</h2>
+
+    <div class="entry-card">
+      <div class="entry-card-grid">
+        <div>
+          <div class="entry-card-head">
+            <span class="entry-tag">Academic Publication</span>
+            <span class="entry-tag">[01]</span>
+          </div>
+          <h3 class="entry-name">Learning-based Software Defect Prediction.</h3>
+          <div class="entry-body">
+            <p>A systematic study evaluating machine learning approaches for predicting software defects in production codebases. Explored feature extraction from abstract syntax trees, code metrics, and change history. Evaluated classification models across multiple open-source Java projects.</p>
+            <p style="margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--ink-mute);letter-spacing:0.04em;">↳ Han Cao — Journal of Physics, Conference Series · CCEAI 2020</p>
+          </div>
+        </div>
+        <dl class="kv-list">
+          <div class="kv-row"><dt>Venue</dt><dd>CCEAI 2020</dd></div>
+          <div class="kv-row"><dt>Published</dt><dd>Journal of Physics</dd></div>
+          <div class="kv-row"><dt>Year</dt><dd><span class="kv-klein">2020</span></dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="entry-card">
+      <div class="entry-card-grid">
+        <div>
+          <div class="entry-card-head">
+            <span class="entry-tag klein">Utility Patent · Granted</span>
+            <span class="entry-tag">[02]</span>
+          </div>
+          <h3 class="entry-name">TCM Self-Service Clinic Management System.</h3>
+          <div class="entry-body">
+            <p>Invented a self-service inquiry management system for Traditional Chinese Medicine outpatient clinics, streamlining patient intake and pre-consultation workflows. Enables patients to complete structured symptom entry and consultation routing without front-desk intervention.</p>
+            <p style="margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--ink-mute);letter-spacing:0.04em;">↳ Grant No. ZL 2017 2 1856637.6 — Patent Authority of China</p>
+          </div>
+        </div>
+        <dl class="kv-list">
+          <div class="kv-row"><dt>Status</dt><dd><span class="kv-klein">Granted</span></dd></div>
+          <div class="kv-row"><dt>Patent No.</dt><dd>ZL 2017 2 1856637.6</dd></div>
+          <div class="kv-row"><dt>Year</dt><dd>2017</dd></div>
+        </dl>
+      </div>
+    </div>
   </div>
-  <div class="footer-right">
-    <div class="footer-contact-row">
-      <span class="fcr-label">Email</span>
-      <a href="mailto:hanmail1024@gmail.com" class="fcr-val">hanmail1024@gmail.com</a>
+</section>
+
+<!-- ── INTERNAL TOOLING ── -->
+<section class="section">
+  <div class="section-inner" style="max-width:1080px;">
+    <span class="section-eyebrow">// internal tooling</span>
+    <h2 class="section-title">Tools I built along the way.</h2>
+    <div class="toc" style="margin-top:32px;">
+      <div class="toc-row">
+        <span class="toc-num">03</span>
+        <div class="toc-body">
+          LLM Evaluation Framework
+          <span class="sub">Internal benchmark suite for evaluating 12 large language models across accuracy, latency, and cost for production model selection at Amazon Lex.</span>
+        </div>
+        <span class="toc-arrow">amazon-lex · 2024</span>
+      </div>
+      <div class="toc-row">
+        <span class="toc-num">04</span>
+        <div class="toc-body">
+          Region Build Orchestration
+          <span class="sub">New orchestration model replacing the manual Lambda region expansion process. Parallelised IA-gating tasks and integrated with automated region config systems.</span>
+        </div>
+        <span class="toc-arrow">aws-lambda · 2023</span>
+      </div>
+      <div class="toc-row">
+        <span class="toc-num">05</span>
+        <div class="toc-body">
+          Load Testing Suite
+          <span class="sub">Designed and executed load testing simulating ~7× normal production traffic across 50,000 throttle cache keys to validate Lambda control plane latency impact.</span>
+        </div>
+        <span class="toc-arrow">aws-lambda · 2023</span>
+      </div>
+      <div class="toc-row">
+        <span class="toc-num">06</span>
+        <div class="toc-body">
+          MapReduce Analysis Pipeline
+          <span class="sub">Custom MapReduce pipeline that shards Amazon Lex bots by intent for parallel processing and result aggregation, achieving sub-60-second analysis for bots with 1,000+ intents.</span>
+        </div>
+        <span class="toc-arrow">amazon-lex · 2024</span>
+      </div>
     </div>
-    <div class="footer-contact-row">
-      <span class="fcr-label">LinkedIn</span>
-      <a href="https://linkedin.com/in/han-ca0" class="fcr-val">han-ca0</a>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="section cta-klein" id="contact-cta">
+  <div class="cta-inner">
+    <div class="cta-top">
+      <span class="cta-eyebrow">— Closing remarks</span>
+      <span class="cta-edition">Ed. 01 / 2026 · Seattle</span>
     </div>
+    <div class="cta-headline-row">
+      <h2 class="cta-headline">
+        Let's ship<br>
+        something <em>real</em>.
+      </h2>
+      <span class="cta-status">
+        <span class="cta-status-dot"></span>
+        Open for Senior &amp; Staff roles
+      </span>
+    </div>
+    <hr class="cta-rule">
+    <dl class="cta-meta">
+      <div class="cta-meta-row">
+        <dt>Role</dt>
+        <dd>Senior / Staff SDE · AI infrastructure</dd>
+      </div>
+      <div class="cta-meta-row">
+        <dt>Located</dt>
+        <dd>Seattle, WA · Pacific Time</dd>
+      </div>
+      <div class="cta-meta-row cta-meta-link">
+        <dt>Email</dt>
+        <dd><a href="mailto:hanmail1024@gmail.com">hanmail1024@gmail.com<span class="cta-arrow">↗</span></a></dd>
+      </div>
+      <div class="cta-meta-row cta-meta-link">
+        <dt>LinkedIn</dt>
+        <dd><a href="https://linkedin.com/in/han-ca0" target="_blank" rel="noopener">linkedin.com/in/han-ca0<span class="cta-arrow">↗</span></a></dd>
+      </div>
+    </dl>
+    <p class="cta-sign">— Han Cao</p>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <a href="index.html" class="footer-name footer-name--logo" aria-label="Han Cao — home">
+        <img src="images/logo.png" alt="Han Cao" class="footer-logo">
+      </a>
+      <p class="footer-tag">Software engineer · Amazon Web Services · Seattle, Washington.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Inside</h4>
+      <ul>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="projects.html">Patents</a></li>
+        <li><a href="gallery.html">Skills</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:hanmail1024@gmail.com">hanmail1024@gmail.com</a></li>
+        <li><a href="https://linkedin.com/in/han-ca0" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Han Cao</span>
+    <span>Built by hand · Seattle · PST</span>
   </div>
 </footer>
 
 <script>
-gsap.registerPlugin(ScrollTrigger);
-window.addEventListener('load', () => { document.body.classList.add('visible'); });
-
-gsap.from('#page-header', {
-  opacity: 0, y: -20,
-  duration: .8, ease: 'power3.out', delay: .15
-});
-
-/*
-  ── STACKING ENTRY ANIMATION ──
-  Entries slide up sequentially — each one "lays itself"
-  onto the page as you scroll past it.
-  The stagger within each group reinforces the sequential feel.
-*/
-gsap.to(['#e1', '#e2'], {
-  opacity: 1,
-  y: 0,
-  duration: .9,
-  ease: 'power3.out',
-  stagger: {
-    each: .18,   /* 180ms between each entry — clear sequential feel */
-    from: 'start',
-  },
-  scrollTrigger: {
-    trigger: '#e1',
-    start: 'top 78%',
-    toggleActions: 'play none none none',
-  }
-});
-
-/* Tool cells stagger in pairs (left then right) */
-[['#t1','#t2'], ['#t3','#t4']].forEach(pair => {
-  gsap.to(pair, {
-    opacity: 1,
-    y: 0,
-    duration: .8,
-    ease: 'power3.out',
-    stagger: .15,
-    scrollTrigger: {
-      trigger: pair[0],
-      start: 'top 80%',
-      toggleActions: 'play none none none',
-    }
-  });
-});
-
-document.querySelectorAll('.cp-copy').forEach(btn => {
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
-    navigator.clipboard.writeText('hanmail1024@gmail.com').then(() => {
-      const prev = btn.innerHTML;
-      btn.innerHTML = '✓';
-      btn.classList.add('copied');
-      setTimeout(() => { btn.innerHTML = prev; btn.classList.remove('copied'); }, 2000);
+(function() {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduced) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.section, .entry-card, .toc-row').forEach(el => {
+      el.classList.add('reveal');
+      io.observe(el);
     });
-  });
-});
-
-document.querySelectorAll('a[href$=".html"]').forEach(a => {
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    const href = a.getAttribute('href');
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity .38s ease';
-    setTimeout(() => { window.location.href = href; }, 400);
-  });
-});
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+  }
+})();
 </script>
+
 </body>
 </html>

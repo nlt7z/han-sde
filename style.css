@@ -1269,6 +1269,22 @@ body::after {
   .cta-meta-row dd { font-size: 16px; }
 }
 
+/* CTA decor — Klein curl, medium accent next to the title.
+   Same size on mobile as desktop (no media-query override). */
+.cta-decor {
+  position: absolute;
+  top: clamp(48px, 9vh, 112px);
+  right: clamp(8px, 4vw, 72px);
+  width: clamp(110px, 14vw, 180px);
+  height: auto;
+  transform: rotate(-10deg);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  opacity: 0.95;
+}
+
 /* ─────────────────────────────────────────────
    DECOR — riso-print accents tucked into sections.
    Each piece is a floating editorial decoration:
